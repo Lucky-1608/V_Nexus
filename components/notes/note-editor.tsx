@@ -100,7 +100,7 @@ export function NoteEditor({ note, onClose, onSave }: NoteEditorProps) {
                 </div>
             </div>
 
-            <div className="flex-1 min-h-[500px] border rounded-md overflow-hidden relative">
+            <div className="flex-1 h-full border rounded-md overflow-hidden relative">
                 {isPreview ? (
                     <div className="h-full w-full p-4 overflow-auto prose dark:prose-invert max-w-none bg-background text-foreground">
                         <ReactMarkdown
@@ -129,11 +129,11 @@ export function NoteEditor({ note, onClose, onSave }: NoteEditorProps) {
                         </ReactMarkdown>
                     </div>
                 ) : (
-                    <Textarea
+                    <textarea
                         placeholder="Write your note here... (Markdown supported)"
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
-                        className="w-full h-full p-4 resize-none border-0 focus-visible:ring-0 font-mono"
+                        className="w-full h-full p-4 resize-none bg-transparent border-0 focus:outline-none focus:ring-0 font-mono"
                     />
                 )}
             </div>

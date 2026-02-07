@@ -158,7 +158,7 @@ export function NotesLayout({ initialNotes }: NotesLayoutProps) {
     }
 
     return (
-        <div className="flex h-[calc(100vh-8rem)] gap-6">
+        <div className="flex h-[calc(100dvh-6rem)] md:h-[calc(100vh-8rem)] gap-6">
             {/* Notes List Sidebar */}
             <div className={cn(
                 "w-full md:w-1/3 flex flex-col gap-4 border-r pr-6",
