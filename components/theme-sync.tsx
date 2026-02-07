@@ -12,11 +12,14 @@ export function ThemeSync({ userTheme, userId }: { userTheme?: string, userId?: 
     const { theme, setTheme } = useTheme()
 
     // Initial sync
+    // Initial sync
+    const mounted = useRef(false)
     useEffect(() => {
-        if (userTheme && userTheme !== theme) {
+        if (!mounted.current && userTheme && userTheme !== theme) {
             setTheme(userTheme)
         }
-    }, [userTheme, setTheme]) // Sync only when userTheme changes from props
+        mounted.current = true
+    }, [userTheme, setTheme, theme])
 
     // Real-time sync
     const themeRef = useRef(theme)

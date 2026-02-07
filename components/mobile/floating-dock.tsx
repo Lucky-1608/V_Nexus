@@ -23,12 +23,12 @@ export function FloatingDock({ user, isAdmin }: FloatingDockProps) {
     // Only show on mobile
     return (
         <>
-            <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[90] md:hidden w-[90%] max-w-[320px]">
+            <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[90] md:hidden w-[90%] max-w-[320px] pointer-events-none">
                 <motion.div
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.5, type: 'spring', stiffness: 200, damping: 20 }}
-                    className="flex items-center justify-between bg-black/60 backdrop-blur-xl border border-white/10 p-1.5 rounded-2xl shadow-2xl "
+                    className="flex items-center justify-between bg-black/60 backdrop-blur-xl border border-white/10 p-1.5 rounded-2xl shadow-2xl pointer-events-auto"
                 >
                     <DockItem
                         href="/dashboard"
