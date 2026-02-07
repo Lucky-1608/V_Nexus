@@ -6,9 +6,16 @@ import { redirect } from 'next/navigation'
 
 export async function getNotes() {
     const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+        return []
+    }
+
     const { data: notes, error } = await supabase
         .from('notes')
         .select('*')
+        .eq('user_id', user.id) // Explicit optimization
         .order('created_at', { ascending: false })
 
     if (error) {
