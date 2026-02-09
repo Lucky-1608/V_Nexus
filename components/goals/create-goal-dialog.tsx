@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, startTransition } from 'react'
 import { Plus, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/select'
 import { createGoal } from '@/app/dashboard/goals/actions'
 import { useSearchParams, useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 export function CreateGoalDialog({ onAdd }: { onAdd?: (goal: any) => void }) {
     const searchParams = useSearchParams()
@@ -41,36 +42,23 @@ export function CreateGoalDialog({ onAdd }: { onAdd?: (goal: any) => void }) {
     async function onSubmit(formData: FormData) {
         setLoading(true)
 
-        // Optimistic Update
-        if (onAdd) {
-            const title = formData.get('title') as string
-            const type = formData.get('type') as string
-            const deadline = formData.get('deadline') as string
-            const current_value = parseFloat(formData.get('current_value') as string)
-            const target_value = parseFloat(formData.get('target_value') as string)
-            const unit = formData.get('unit') as string
-
-            const newGoal = {
-                id: crypto.randomUUID(),
-                title,
-                type,
-                deadline: deadline || null,
-                current_value,
-                target_value,
-                unit,
-                priority: 'Medium', // Default
-                created_at: new Date().toISOString(),
-                user_id: 'temp', // Not used in display usually
-            }
-            onAdd(newGoal)
-            setOpen(false)
-        }
-
         try {
-            await createGoal(formData)
-            if (!onAdd) setOpen(false)
+            // @ts-ignore
+            const result = await createGoal(formData)
+
+            if (result && result.goal) {
+                if (onAdd) {
+                    startTransition(() => {
+                        onAdd(result.goal)
+                    })
+                }
+                setOpen(false)
+                toast.success('Goal created')
+                router.refresh()
+            }
         } catch (error) {
             console.error('Failed to create goal', error)
+            toast.error('Failed to create goal')
         } finally {
             setLoading(false)
         }

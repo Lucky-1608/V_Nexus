@@ -28,7 +28,7 @@ export async function createResource(formData: FormData) {
     const collectionId = formData.get('collection_id') as string
     const categoryId = formData.get('category_id') as string
 
-    const { error } = await supabase.from('resources').insert({
+    const { data: resource, error } = await supabase.from('resources').insert({
         title,
         url,
         type,
@@ -38,13 +38,20 @@ export async function createResource(formData: FormData) {
         collection_id: (collectionId && collectionId !== 'none') ? collectionId : null,
         category_id: (categoryId && categoryId !== 'none') ? categoryId : null
     })
+        .select()
+        .single()
 
     if (error) {
         console.error('Error creating resource:', error)
-        throw new Error(`Failed to create resource: ${error.message}`)
+        return { error: `Failed to create resource: ${error.message}` }
     }
 
     revalidatePath('/dashboard/resources')
+
+    if (formData.get('prevent_redirect') === 'true') {
+        return { success: true, resource }
+    }
+
     redirect('/dashboard/resources')
 }
 
@@ -84,6 +91,33 @@ export async function createLearningPath(formData: FormData) {
 
     revalidatePath('/dashboard/paths')
     redirect('/dashboard/paths')
+}
+
+export async function createLearningPathAndReturn(formData: FormData) {
+    const supabase = await createClient()
+
+    const title = formData.get('title') as string
+    const description = formData.get('description') as string
+    const linksRaw = formData.get('links') as string
+
+    // Split by newlines or commas
+    const links = linksRaw ? linksRaw.split(/[\n,]+/).map(l => l.trim()).filter(Boolean) : []
+
+    const { data: path, error } = await supabase.from('learning_paths').insert({
+        title,
+        description,
+        links,
+    })
+        .select()
+        .single()
+
+    if (error) {
+        console.error('Error creating learning path:', error)
+        return { error: 'Failed to create learning path' }
+    }
+
+    revalidatePath('/dashboard/paths')
+    return { success: true, path }
 }
 
 export async function deleteLearningPath(id: string) {

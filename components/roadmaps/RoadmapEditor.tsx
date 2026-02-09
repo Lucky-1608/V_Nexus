@@ -158,7 +158,7 @@ function LinkedResourcesButton({ step, onRemoveLink }: { step: Step, onRemoveLin
     )
 }
 
-function SortableStep({ step, depth, onToggle, onDelete, onUpdate, onAddBranch, onLinkResource, onRemoveLink }: {
+function SortableStep({ step, depth, onToggle, onDelete, onUpdate, onAddBranch, onLinkResource, onRemoveLink, categories }: {
     step: Step,
     depth: number,
     onToggle: (checked: boolean) => void,
@@ -167,6 +167,7 @@ function SortableStep({ step, depth, onToggle, onDelete, onUpdate, onAddBranch, 
     onAddBranch: () => void,
     onLinkResource: (type: 'note' | 'path' | 'resource' | 'goal', id: string) => void
     onRemoveLink: (linkId: string) => void
+    categories: any[]
 }) {
     const {
         attributes,
@@ -215,11 +216,8 @@ function SortableStep({ step, depth, onToggle, onDelete, onUpdate, onAddBranch, 
 
             <LinkResourceDialog
                 onSelect={onLinkResource}
+                categories={categories}
                 currentLinks={{
-                    // Pass empty or something to indicate multi-select if supported, 
-                    // or just nothing so they can add more.
-                    // For now we don't block adding duplicates in UI, but maybe we should?
-                    // The old interface expected single IDs.
                     noteId: null,
                     pathId: null,
                     resourceId: null,
@@ -245,7 +243,7 @@ function SortableStep({ step, depth, onToggle, onDelete, onUpdate, onAddBranch, 
     )
 }
 
-export function RoadmapEditor({ roadmap, initialSteps }: { roadmap: Roadmap, initialSteps: Step[] }) {
+export function RoadmapEditor({ roadmap, initialSteps, categories = [] }: { roadmap: Roadmap, initialSteps: Step[], categories?: any[] }) {
     const [steps, setSteps] = useState<Step[]>(initialSteps.sort((a, b) => a.order - b.order))
     const [title, setTitle] = useState(roadmap.title)
     const [description, setDescription] = useState(roadmap.description || '')
@@ -558,6 +556,7 @@ export function RoadmapEditor({ roadmap, initialSteps }: { roadmap: Roadmap, ini
                                         <SortableStep
                                             step={step}
                                             depth={step.depth}
+                                            categories={categories}
                                             onToggle={(c) => handleStepCompletion(step.id, c)}
                                             onDelete={() => handleDeleteStep(step.id)}
                                             onUpdate={(t) => {

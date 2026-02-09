@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, startTransition } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -69,8 +69,8 @@ export function AddResourceDialog({ categories: initialCategories, onAdd }: { ca
             const summary = formData.get('summary') as string
             const tags = formData.get('tags') as string
 
-            // Handle File Upload logic logic...
-            if (type === 'pdf' && uploadType === 'file') {
+            // Handle File Upload logic
+            if ((type === 'pdf' || type === 'image') && uploadType === 'file') {
                 const fileInput = (e.currentTarget.querySelector('input[type="file"]') as HTMLInputElement)
                 const file = fileInput?.files?.[0]
 
@@ -82,8 +82,9 @@ export function AddResourceDialog({ categories: initialCategories, onAdd }: { ca
 
                 const supabase = createClient()
                 const fileExt = file.name.split('.').pop()
+                const folder = type === 'pdf' ? 'pdfs' : 'images'
                 const fileName = `${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`
-                const filePath = `pdfs/${fileName}`
+                const filePath = `${folder}/${fileName}`
 
                 const { error: uploadError } = await supabase.storage
                     .from('resources')
@@ -101,30 +102,39 @@ export function AddResourceDialog({ categories: initialCategories, onAdd }: { ca
 
             const url = formData.get('url') as string
 
-            // Optimistic Update
+            // Append prevent_redirect if onAdd is present (modal mode)
             if (onAdd) {
-                const newResource = {
-                    id: crypto.randomUUID(),
-                    title,
-                    type,
-                    summary,
-                    tags,
-                    url,
-                    created_at: new Date().toISOString()
-                }
-                onAdd(newResource)
-                setOpen(false)
+                formData.append('prevent_redirect', 'true')
             }
 
             const result = await createResource(formData)
-            if (!onAdd) {
-                setOpen(false)
-                toast.success("Resource created")
+
+            if (result && result.error) {
+                toast.error(result.error)
+                return
             }
 
+            // ...
 
+            if (onAdd && result && result.resource) {
+                startTransition(() => {
+                    onAdd(result.resource)
+                })
+                setOpen(false)
+                toast.success("Resource created")
+            } else if (!onAdd) {
+                // Redirect handled by server action usually, but if we prevent_redirect...
+                // Actually if !onAdd we don't prevent redirect, so it should have redirected.
+                // But if it didn't (e.g. we changed logic), handle it.
+                if (result?.success) {
+                    setOpen(false)
+                    toast.success("Resource created")
+                }
+            }
         } catch (error: any) {
             console.error('Error creating resource:', error)
+            // If it's a redirect error, ignore it (successful redirect)
+            if (error.message === 'NEXT_REDIRECT') return
             toast.error('Failed to create resource.')
         } finally {
             setLoading(false)
@@ -227,7 +237,7 @@ export function AddResourceDialog({ categories: initialCategories, onAdd }: { ca
                         </div>
                     </div>
 
-                    {resourceType === 'pdf' ? (
+                    {resourceType === 'pdf' || resourceType === 'image' ? (
                         <div className="space-y-4 border p-4 rounded-md bg-muted/20">
                             <Label>Source</Label>
                             <RadioGroup defaultValue="url" onValueChange={setUploadType} className="flex gap-4">
@@ -243,13 +253,13 @@ export function AddResourceDialog({ categories: initialCategories, onAdd }: { ca
 
                             {uploadType === 'url' ? (
                                 <div className="space-y-2">
-                                    <Label htmlFor="url">PDF URL</Label>
-                                    <Input id="url" name="url" placeholder="https://example.com/doc.pdf" required />
+                                    <Label htmlFor="url">{resourceType === 'pdf' ? 'PDF' : 'Image'} URL</Label>
+                                    <Input id="url" name="url" placeholder={`https://example.com/file.${resourceType === 'pdf' ? 'pdf' : 'png'}`} required />
                                 </div>
                             ) : (
                                 <div className="space-y-2">
-                                    <Label htmlFor="file">Upload PDF</Label>
-                                    <Input id="file" type="file" accept=".pdf" required />
+                                    <Label htmlFor="file">Upload {resourceType === 'pdf' ? 'PDF' : 'Image'}</Label>
+                                    <Input id="file" type="file" accept={resourceType === 'pdf' ? ".pdf" : "image/*"} required />
                                     <input type="hidden" name="url" value={uploadType === 'file' ? 'placeholder' : ''} />
                                 </div>
                             )}

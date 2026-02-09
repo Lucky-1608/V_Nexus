@@ -1,5 +1,14 @@
 import { Plus_Jakarta_Sans, Instrument_Sans } from "next/font/google";
-import type { Viewport } from 'next';
+import type { Viewport, Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: {
+    default: 'LifeOS',
+    template: '%s | LifeOS',
+  },
+  description: 'Master your habits, tasks, finances, and knowledge in one central hub.',
+};
+
 
 export const viewport: Viewport = {
   width: 'device-width',

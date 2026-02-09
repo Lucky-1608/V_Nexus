@@ -15,6 +15,10 @@ import { getLinkableItems } from '@/app/dashboard/roadmaps/resource-actions'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { cn } from '@/lib/utils'
+import { AddResourceDialog } from '@/components/resources/add-resource-dialog'
+import { CreateGoalDialog } from '@/components/goals/create-goal-dialog'
+import { CreateNoteDialog } from '@/components/notes/create-note-dialog'
+import { CreatePathDialog } from '@/components/paths/create-path-dialog'
 
 interface LinkableItem {
     id: string
@@ -24,6 +28,7 @@ interface LinkableItem {
 
 interface LinkResourceDialogProps {
     onSelect: (type: 'note' | 'path' | 'resource' | 'goal', id: string, title: string) => void
+    categories?: any[]
     currentLinks?: {
         noteId?: string | null
         pathId?: string | null
@@ -32,14 +37,13 @@ interface LinkResourceDialogProps {
     }
 }
 
-export function LinkResourceDialog({ onSelect, currentLinks }: LinkResourceDialogProps) {
+export function LinkResourceDialog({ onSelect, currentLinks, categories = [] }: LinkResourceDialogProps) {
     const [open, setOpen] = useState(false)
     const [search, setSearch] = useState('')
     const [loading, setLoading] = useState(false)
     const [items, setItems] = useState<{
         notes: LinkableItem[]
         paths: LinkableItem[]
-
         resources: LinkableItem[]
         goals: LinkableItem[]
     }>({ notes: [], paths: [], resources: [], goals: [] })
@@ -62,6 +66,12 @@ export function LinkResourceDialog({ onSelect, currentLinks }: LinkResourceDialo
         setOpen(false)
     }
 
+    const handleCreated = (type: 'note' | 'path' | 'resource' | 'goal', item: any) => {
+        // optimistically add to list (though we might not need to if we auto-select)
+        // Auto-select the new item!
+        handleSelect(type, item.id, item.title)
+    }
+
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
@@ -69,7 +79,7 @@ export function LinkResourceDialog({ onSelect, currentLinks }: LinkResourceDialo
                     <Link2 className="h-4 w-4" />
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[500px]">
+            <DialogContent className="sm:max-w-[600px] h-[600px] flex flex-col">
                 <DialogHeader>
                     <DialogTitle>Link Resource to Step</DialogTitle>
                 </DialogHeader>
@@ -84,7 +94,7 @@ export function LinkResourceDialog({ onSelect, currentLinks }: LinkResourceDialo
                     />
                 </div>
 
-                <Tabs defaultValue="notes" className="w-full">
+                <Tabs defaultValue="notes" className="flex-1 flex flex-col min-h-0">
                     <TabsList className="grid w-full grid-cols-4">
                         <TabsTrigger value="notes">Notes</TabsTrigger>
                         <TabsTrigger value="paths">Paths</TabsTrigger>
@@ -92,9 +102,12 @@ export function LinkResourceDialog({ onSelect, currentLinks }: LinkResourceDialo
                         <TabsTrigger value="goals">Goals</TabsTrigger>
                     </TabsList>
 
-                    <TabsContent value="notes" className="mt-4">
-                        <ScrollArea className="h-[300px]">
-                            <div className="space-y-1 pr-4">
+                    <TabsContent value="notes" className="flex-1 flex flex-col gap-4 mt-4 min-h-0">
+                        <div className="flex justify-end">
+                            <CreateNoteDialog onAdd={(note) => handleCreated('note', note)} />
+                        </div>
+                        <ScrollArea className="flex-1 border rounded-md p-2">
+                            <div className="space-y-1">
                                 {filterItems(items.notes).length === 0 ? (
                                     <p className="text-sm text-center text-muted-foreground py-8">No notes found.</p>
                                 ) : (
@@ -117,9 +130,12 @@ export function LinkResourceDialog({ onSelect, currentLinks }: LinkResourceDialo
                         </ScrollArea>
                     </TabsContent>
 
-                    <TabsContent value="paths" className="mt-4">
-                        <ScrollArea className="h-[300px]">
-                            <div className="space-y-1 pr-4">
+                    <TabsContent value="paths" className="flex-1 flex flex-col gap-4 mt-4 min-h-0">
+                        <div className="flex justify-end">
+                            <CreatePathDialog onAdd={(path) => handleCreated('path', path)} />
+                        </div>
+                        <ScrollArea className="flex-1 border rounded-md p-2">
+                            <div className="space-y-1">
                                 {filterItems(items.paths).length === 0 ? (
                                     <p className="text-sm text-center text-muted-foreground py-8">No learning paths found.</p>
                                 ) : (
@@ -142,9 +158,12 @@ export function LinkResourceDialog({ onSelect, currentLinks }: LinkResourceDialo
                         </ScrollArea>
                     </TabsContent>
 
-                    <TabsContent value="resources" className="mt-4">
-                        <ScrollArea className="h-[300px]">
-                            <div className="space-y-1 pr-4">
+                    <TabsContent value="resources" className="flex-1 flex flex-col gap-4 mt-4 min-h-0">
+                        <div className="flex justify-end">
+                            <AddResourceDialog categories={categories} onAdd={(res) => handleCreated('resource', res)} />
+                        </div>
+                        <ScrollArea className="flex-1 border rounded-md p-2">
+                            <div className="space-y-1">
                                 {filterItems(items.resources).length === 0 ? (
                                     <p className="text-sm text-center text-muted-foreground py-8">No resources found.</p>
                                 ) : (
@@ -168,9 +187,12 @@ export function LinkResourceDialog({ onSelect, currentLinks }: LinkResourceDialo
                     </TabsContent>
 
 
-                    <TabsContent value="goals" className="mt-4">
-                        <ScrollArea className="h-[300px]">
-                            <div className="space-y-1 pr-4">
+                    <TabsContent value="goals" className="flex-1 flex flex-col gap-4 mt-4 min-h-0">
+                        <div className="flex justify-end">
+                            <CreateGoalDialog onAdd={(goal) => handleCreated('goal', goal)} />
+                        </div>
+                        <ScrollArea className="flex-1 border rounded-md p-2">
+                            <div className="space-y-1">
                                 {filterItems(items.goals).length === 0 ? (
                                     <p className="text-sm text-center text-muted-foreground py-8">No goals found.</p>
                                 ) : (

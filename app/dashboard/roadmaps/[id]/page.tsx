@@ -140,9 +140,15 @@ export default async function RoadmapPage({ params, searchParams }: { params: Pr
         }
     }
 
+    // Fetch categories for resource creation
+    const { data: categories } = await supabase
+        .from('categories')
+        .select('*')
+        .order('name', { ascending: true })
+
     // If user is owner, show Editor. Else show View.
     if (roadmap.owner_id === user?.id) {
-        return <RoadmapEditor roadmap={roadmap} initialSteps={steps || []} />
+        return <RoadmapEditor roadmap={roadmap} initialSteps={steps || []} categories={categories || []} />
     }
 
     // If user has access (via RLS) but is not owner, show Read Only view

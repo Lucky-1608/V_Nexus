@@ -16,7 +16,7 @@ export async function createGoal(formData: FormData) {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) throw new Error('Unauthorized')
 
-    const { error } = await supabase.from('goals').insert({
+    const { data: goal, error } = await supabase.from('goals').insert({
         title,
         type,
         target_value: target,
@@ -25,13 +25,16 @@ export async function createGoal(formData: FormData) {
         deadline: deadline ? deadline : null,
         user_id: user.id
     })
+        .select()
+        .single()
 
     if (error) {
         console.error('Error creating goal:', error)
-        throw new Error('Failed to create goal')
+        return { error: 'Failed to create goal' }
     }
 
     revalidatePath('/dashboard/goals')
+    return { success: true, goal }
 }
 
 export async function updateGoalProgress(id: string, current: number) {
