@@ -64,13 +64,13 @@ export function Sidebar({ className, isAdmin }: SidebarProps) {
                         <h2 className="text-xl font-bold tracking-tighter text-primary flex items-center gap-3">
                             <div className="relative h-9 w-9 rounded-lg overflow-hidden shadow-sm">
                                 <Image
-                                    src="/logo.png"
-                                    alt="LifeOS Logo"
+                                    src="/logo.svg"
+                                    alt="V_Nexus Logo"
                                     fill
                                     className="object-cover"
                                 />
                             </div>
-                            LifeOS
+                            V_Nexus
                         </h2>
                     </Link>
                     <div className="space-y-1">

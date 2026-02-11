@@ -37,13 +37,13 @@ export function MobileNav({ isAdmin }: { isAdmin?: boolean }) {
                             <SheetTitle className="mb-2 px-4 text-lg font-semibold tracking-tight text-primary flex items-center gap-2">
                                 <div className="relative h-8 w-8 rounded-sm overflow-hidden">
                                     <Image
-                                        src="/logo.png"
-                                        alt="LifeOS Logo"
+                                        src="/logo.svg"
+                                        alt="V_Nexus Logo"
                                         fill
                                         className="object-cover"
                                     />
                                 </div>
-                                LifeOS
+                                V_Nexus
                             </SheetTitle>
                             <div className="space-y-1">
                                 {sidebarNavItems.map((item) => {

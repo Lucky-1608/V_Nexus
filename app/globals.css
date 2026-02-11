@@ -308,8 +308,7 @@
 
   a,
   button,
-  [role="button"],
-  .cursor-pointer {
+  [role="button"] {
     cursor: var(--cursor-pointer);
   }
 
@@ -333,5 +332,19 @@
 
   h1 {
     @apply tracking-tighter;
+  }
+}
+
+@layer utilities {
+  .cursor-pointer {
+    cursor: var(--cursor-pointer);
+  }
+
+  .cursor-default {
+    cursor: var(--cursor-default);
+  }
+
+  .cursor-text {
+    cursor: var(--cursor-text);
   }
 }

@@ -1,4 +1,4 @@
-# LifeOS (Nexus)
+# V_Nexus
 
 Your all-in-one personal operating system. Master your habits, tasks, finances, and knowledge in one central hub.
 

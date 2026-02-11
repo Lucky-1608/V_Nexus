@@ -29,19 +29,19 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
     return (
         <div className="flex min-h-screen relative">
-            {/* Desktop Sidebar - Sticky for root scroll */}
-            <aside className="hidden md:block w-64 shrink-0 sticky top-0 h-screen z-40 bg-background/50 backdrop-blur-md">
-                <Sidebar isAdmin={user.email === process.env.ADMIN_EMAIL} className="h-full border-r" />
+            {/* Desktop Sidebar - Fixed Position */}
+            <aside className="hidden md:block w-64 fixed top-0 left-0 h-screen z-40 bg-background/50 backdrop-blur-md border-r">
+                <Sidebar isAdmin={user.email === process.env.ADMIN_EMAIL} className="h-full" />
             </aside>
 
-            {/* Main Content Area */}
-            <div className="flex-1 flex flex-col min-h-screen relative z-10 min-w-0">
+            {/* Main Content Area - Padded to respect fixed sidebar */}
+            <div className="flex-1 flex flex-col min-h-screen relative z-10 min-w-0 md:pl-64">
                 <ThemeSync userTheme={userSettings?.settings?.theme} userId={user.id} />
 
                 {/* Mobile Header - Cinematic Redesign */}
                 <div className="md:hidden flex items-center justify-between p-4 sticky top-0 z-50">
                     <Link href="/dashboard" className="font-syne font-bold text-xl tracking-tight text-foreground/90 backdrop-blur-md bg-background/30 rounded-full px-4 py-1.5 border border-white/5 shadow-sm">
-                        LifeOS
+                        V_Nexus
                     </Link>
                     <div className="backdrop-blur-md bg-background/30 rounded-full p-1 border border-white/5 shadow-sm">
                         <ThemeToggle />

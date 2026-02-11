@@ -13,6 +13,13 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 import { Plus, Loader2 } from 'lucide-react'
 import { createCategory } from '@/app/dashboard/settings/actions'
 import { useSearchParams, useRouter } from 'next/navigation'
@@ -22,6 +29,7 @@ export function CreateCategoryDialog() {
     const router = useRouter()
     const [open, setOpen] = useState(false)
     const [name, setName] = useState('')
+    const [type, setType] = useState('resource')
     const [loading, setLoading] = useState(false)
 
     // Auto-open dialog if ?add=true is in URL
@@ -40,11 +48,13 @@ export function CreateCategoryDialog() {
 
         const formData = new FormData()
         formData.append('name', name)
+        formData.append('type', type)
 
         try {
             await createCategory(formData)
             setOpen(false)
             setName('')
+            setType('resource')
         } catch (error) {
             console.error('Failed to create category:', error)
         } finally {
@@ -64,7 +74,7 @@ export function CreateCategoryDialog() {
                 <DialogHeader>
                     <DialogTitle>Create Category</DialogTitle>
                     <DialogDescription>
-                        Create a new category to organize your resources.
+                        Create a new category to organize your resources or finances.
                     </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit}>
@@ -78,9 +88,26 @@ export function CreateCategoryDialog() {
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 className="col-span-3"
-                                placeholder="e.g. Design, Development"
+                                placeholder="e.g. Design, Salary"
                                 required
                             />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="type" className="text-right">
+                                Type
+                            </Label>
+                            <div className="col-span-3">
+                                <Select value={type} onValueChange={setType}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select type" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="resource">Resource</SelectItem>
+                                        <SelectItem value="Income">Income</SelectItem>
+                                        <SelectItem value="Expense">Expense</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
                         </div>
                     </div>
                     <DialogFooter>

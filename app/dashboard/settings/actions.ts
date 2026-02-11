@@ -240,13 +240,14 @@ export async function updatePassword(formData: FormData) {
 export async function createCategory(formData: FormData) {
     const supabase = await createClient()
     const name = formData.get('name') as string
+    const type = formData.get('type') as string || 'resource'
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) throw new Error('Not authenticated')
 
     const { error } = await supabase.from('categories').insert({
         name,
-        type: 'resource',
+        type,
         user_id: user.id
     })
 

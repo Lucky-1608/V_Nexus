@@ -20,7 +20,7 @@ export default async function CategoriesPage({
     const supabase = await createClient()
     const { data: categories } = await supabase
         .from('categories')
-        .select('*, resources(count)')
+        .select('*, resources(count), transactions(count)')
         .order('name', { ascending: true })
 
     return (
@@ -40,36 +40,85 @@ export default async function CategoriesPage({
 
             <DashboardSearch placeholder="Search categories..." />
 
-            <StaggerContainer key={searchQuery} className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
-                {categories?.filter((c: any) =>
-                    !searchQuery ||
-                    (c.name?.toLowerCase() || '').includes(searchQuery.toLowerCase())
-                ).map((category: any) => (
-                    <StaggerItem key={category.id} className="h-full">
-                        <HoverEffect variant="lift">
-                            <Link href={`/dashboard/categories/${category.id}`}>
-                                <SpotlightCard className="hover:bg-accent/50 transition-colors cursor-pointer h-full">
-                                    <CardHeader>
-                                        <CardTitle className="flex items-center gap-2">
-                                            <Folder className="h-5 w-5 text-blue-500" />
-                                            {category.name}
-                                        </CardTitle>
-                                        <CardDescription>
-                                            {category.resources?.[0]?.count || 0} resources
-                                        </CardDescription>
-                                    </CardHeader>
-                                </SpotlightCard>
-                            </Link>
-                        </HoverEffect>
-                    </StaggerItem>
-                ))}
+            {/* Resource Categories Section */}
+            <div className="space-y-4">
+                <h2 className="text-xl font-semibold tracking-tight">Resource Categories</h2>
+                <StaggerContainer key={`resources-${searchQuery}`} className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
+                    {categories?.filter((c: any) =>
+                        (!c.type || c.type === 'resource') &&
+                        (!searchQuery || (c.name?.toLowerCase() || '').includes(searchQuery.toLowerCase()))
+                    ).map((category: any) => (
+                        <CategoryCard key={category.id} category={category} />
+                    ))}
 
-                {categories?.length === 0 && (
-                    <div className="col-span-full text-center text-muted-foreground py-10">
-                        No categories found. Create one to organize your resources.
-                    </div>
-                )}
-            </StaggerContainer>
+                    {categories?.filter((c: any) => (!c.type || c.type === 'resource') && (!searchQuery || (c.name?.toLowerCase() || '').includes(searchQuery.toLowerCase()))).length === 0 && (
+                        <div className="col-span-full text-center text-muted-foreground py-10 border rounded-lg border-dashed">
+                            No resource categories found.
+                        </div>
+                    )}
+                </StaggerContainer>
+            </div>
+
+            {/* Finance Categories Section */}
+            <div className="space-y-4 pt-4 border-t">
+                <h2 className="text-xl font-semibold tracking-tight">Finance Categories</h2>
+                <StaggerContainer key={`finances-${searchQuery}`} className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
+                    {categories?.filter((c: any) =>
+                        (c.type === 'Income' || c.type === 'Expense') &&
+                        (!searchQuery || (c.name?.toLowerCase() || '').includes(searchQuery.toLowerCase()))
+                    ).map((category: any) => (
+                        <CategoryCard key={category.id} category={category} />
+                    ))}
+
+                    {categories?.filter((c: any) => (c.type === 'Income' || c.type === 'Expense') && (!searchQuery || (c.name?.toLowerCase() || '').includes(searchQuery.toLowerCase()))).length === 0 && (
+                        <div className="col-span-full text-center text-muted-foreground py-10 border rounded-lg border-dashed">
+                            No finance categories found.
+                        </div>
+                    )}
+                </StaggerContainer>
+            </div>
         </div>
+    )
+}
+
+function CategoryCard({ category }: { category: any }) {
+    return (
+        <StaggerItem className="h-full">
+            <HoverEffect variant="lift">
+                <Link href={`/dashboard/categories/${category.id}`}>
+                    <SpotlightCard className="hover:bg-accent/50 transition-colors cursor-pointer h-full">
+                        <CardHeader>
+                            <CardTitle className="flex items-center justify-between gap-2">
+                                <div className="flex items-center gap-2">
+                                    <Folder className="h-5 w-5 text-blue-500" />
+                                    {category.name}
+                                </div>
+                                {category.type && category.type !== 'resource' && (
+                                    <span className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground uppercase tracking-wider">
+                                        {category.type}
+                                    </span>
+                                )}
+                            </CardTitle>
+                            <CardDescription className="flex flex-col gap-1">
+                                {(!category.type || category.type === 'resource' || (category.resources?.[0]?.count || 0) > 0) && (
+                                    <span>
+                                        {category.resources?.[0]?.count || 0} resources
+                                    </span>
+                                )}
+                                {(category.transactions?.[0]?.count || 0) > 0 && (
+                                    <span>
+                                        {category.transactions?.[0]?.count} transactions
+                                    </span>
+                                )}
+                                {/* Fallback if both are empty for finance category */}
+                                {category.type && category.type !== 'resource' && (category.transactions?.[0]?.count || 0) === 0 && (category.resources?.[0]?.count || 0) === 0 && (
+                                    <span>No transactions</span>
+                                )}
+                            </CardDescription>
+                        </CardHeader>
+                    </SpotlightCard>
+                </Link>
+            </HoverEffect>
+        </StaggerItem>
     )
 }
