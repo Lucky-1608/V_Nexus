@@ -64,7 +64,7 @@ export default function LoginPage(props: { searchParams: Promise<{ message: stri
                 <div className="flex flex-col items-center justify-center p-6 sm:p-12 lg:p-24 w-full max-w-2xl mx-auto">
 
                     {/* Mobile Logo (Visible only on mobile) */}
-                    <div className="lg:hidden absolute top-8 left-8 flex items-center gap-2">
+                    <div className="lg:hidden absolute top-6 left-6 flex items-center gap-2 md:top-8 md:left-8 z-50">
                         <div className="h-8 w-8 bg-white text-black flex items-center justify-center rounded-md">
                             <Command size={16} strokeWidth={3} />
                         </div>
@@ -92,7 +92,7 @@ export default function LoginPage(props: { searchParams: Promise<{ message: stri
                                             name="email"
                                             placeholder="name@example.com"
                                             required
-                                            className="bg-transparent border-0 border-b border-zinc-800 rounded-none px-0 py-6 text-lg placeholder:text-zinc-700 focus-visible:ring-0 focus-visible:border-white transition-all duration-300"
+                                            className="bg-transparent border-0 border-b border-zinc-800 rounded-none px-0 py-4 md:py-6 text-base md:text-lg placeholder:text-zinc-700 focus-visible:ring-0 focus-visible:border-white transition-all duration-300"
                                         />
                                     </div>
                                 </div>
@@ -107,7 +107,7 @@ export default function LoginPage(props: { searchParams: Promise<{ message: stri
                                             name="password"
                                             type="password"
                                             required
-                                            className="bg-transparent border-0 border-b border-zinc-800 rounded-none px-0 py-6 text-lg placeholder:text-zinc-700 focus-visible:ring-0 focus-visible:border-white transition-all duration-300"
+                                            className="bg-transparent border-0 border-b border-zinc-800 rounded-none px-0 py-4 md:py-6 text-base md:text-lg placeholder:text-zinc-700 focus-visible:ring-0 focus-visible:border-white transition-all duration-300"
                                         />
                                     </div>
                                 </div>

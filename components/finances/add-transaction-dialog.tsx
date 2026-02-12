@@ -93,7 +93,15 @@ export function AddTransactionDialog({ categories, projects, onAdd }: { categori
                 id: crypto.randomUUID(),
                 type,
                 amount,
-                date: dateStr ? new Date(dateStr).toISOString() : new Date().toISOString(),
+                date: (() => {
+                    if (dateStr) {
+                        const d = new Date(dateStr)
+                        const now = new Date()
+                        d.setHours(now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds())
+                        return d.toISOString()
+                    }
+                    return new Date().toISOString()
+                })(),
                 category_id: 'temp',
                 category_name: finalCategoryName,
                 description,

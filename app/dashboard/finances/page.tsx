@@ -8,22 +8,34 @@ export default async function FinancesPage() {
 
     if (!user) return <div>Please log in</div>
 
-    const { data: transactions } = await supabase
+    const { data: transactions, error: transactionsError } = await supabase
         .from('transactions')
         .select('*')
         .eq('user_id', user.id)
         .order('date', { ascending: false })
 
-    const { data: categories } = await supabase
+    if (transactionsError) {
+        console.error('Error fetching transactions:', transactionsError)
+    }
+
+    const { data: categories, error: categoriesError } = await supabase
         .from('categories')
         .select('*')
         .eq('user_id', user.id)
         .order('name', { ascending: true })
 
-    const { data: projects } = await supabase
+    if (categoriesError) {
+        console.error('Error fetching categories:', categoriesError)
+    }
+
+    const { data: projects, error: projectsError } = await supabase
         .from('projects')
         .select('*')
         .order('name', { ascending: true })
+
+    if (projectsError) {
+        console.error('Error fetching projects:', projectsError)
+    }
 
     return (
         <FinancesManager

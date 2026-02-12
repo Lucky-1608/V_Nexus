@@ -44,7 +44,14 @@ export async function addTransaction(formData: FormData) {
 
         let date: string
         try {
-            date = dateRaw ? new Date(dateRaw).toISOString() : new Date().toISOString()
+            if (dateRaw) {
+                const dateObj = new Date(dateRaw)
+                const now = new Date()
+                dateObj.setHours(now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds())
+                date = dateObj.toISOString()
+            } else {
+                date = new Date().toISOString()
+            }
         } catch {
             return { error: 'Invalid date format' }
         }
@@ -120,7 +127,14 @@ export async function updateTransaction(id: string, formData: FormData) {
 
         let date: string
         try {
-            date = dateRaw ? new Date(dateRaw).toISOString() : new Date().toISOString()
+            if (dateRaw) {
+                const dateObj = new Date(dateRaw)
+                const now = new Date()
+                dateObj.setHours(now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds())
+                date = dateObj.toISOString()
+            } else {
+                date = new Date().toISOString()
+            }
         } catch {
             return { error: 'Invalid date format' }
         }
