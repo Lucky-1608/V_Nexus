@@ -4,6 +4,8 @@ import { useState, useRef, KeyboardEvent } from 'react'
 import { Send, Smile, Paperclip, CheckSquare, X, Calendar as CalendarIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { Input } from '@/components/ui/input'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { sendMessage, createTaskDirectly } from '@/app/dashboard/chat/actions'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { toast } from 'sonner'
@@ -11,8 +13,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
 import { AttachmentPicker } from './AttachmentPicker'
 import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Calendar } from '@/components/ui/calendar'
 import { format } from 'date-fns'
 
 interface ChatInputProps {
@@ -291,29 +291,17 @@ export function ChatInput({ teamId, projectId, members = [], onSendMessage, onTy
                         </SelectContent>
                     </Select>
 
-                    <Popover>
-                        <PopoverTrigger asChild>
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                className={cn(
-                                    "h-7 border-dashed gap-1 text-xs font-normal",
-                                    !dueDate && "text-muted-foreground"
-                                )}
-                            >
-                                <CalendarIcon className="h-3 w-3" />
-                                {dueDate ? format(dueDate, "MMM d") : "Due"}
-                            </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                                mode="single"
-                                selected={dueDate}
-                                onSelect={setDueDate}
-                                initialFocus
-                            />
-                        </PopoverContent>
-                    </Popover>
+                    <div className="relative">
+                        <Input
+                            type="date"
+                            value={dueDate ? format(dueDate, 'yyyy-MM-dd') : ''}
+                            onChange={(e) => {
+                                const date = e.target.value ? new Date(e.target.value) : undefined
+                                setDueDate(date)
+                            }}
+                            className="h-7 w-[130px] text-xs px-2 py-1"
+                        />
+                    </div>
 
                     <Button
                         variant="ghost"

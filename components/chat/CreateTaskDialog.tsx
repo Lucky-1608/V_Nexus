@@ -5,8 +5,6 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Calendar } from '@/components/ui/calendar'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { format } from 'date-fns'
 import { CalendarIcon, Loader2 } from 'lucide-react'
@@ -115,28 +113,14 @@ export function CreateTaskDialog({ open, onOpenChange, messageId, initialTitle, 
                     </div>
                     <div className="grid gap-2">
                         <label className="text-sm font-medium">Due Date</label>
-                        <Popover>
-                            <PopoverTrigger asChild>
-                                <Button
-                                    variant={"outline"}
-                                    className={cn(
-                                        "w-full justify-start text-left font-normal",
-                                        !dueDate && "text-muted-foreground"
-                                    )}
-                                >
-                                    <CalendarIcon className="mr-2 h-4 w-4" />
-                                    {dueDate ? format(dueDate, "PPP") : <span>Pick a date</span>}
-                                </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0" align="start">
-                                <Calendar
-                                    mode="single"
-                                    selected={dueDate}
-                                    onSelect={setDueDate}
-                                    initialFocus
-                                />
-                            </PopoverContent>
-                        </Popover>
+                        <Input
+                            type="date"
+                            value={dueDate ? format(dueDate, 'yyyy-MM-dd') : ''}
+                            onChange={(e) => {
+                                const date = e.target.value ? new Date(e.target.value) : undefined
+                                setDueDate(date)
+                            }}
+                        />
                     </div>
                 </div>
                 <DialogFooter>
