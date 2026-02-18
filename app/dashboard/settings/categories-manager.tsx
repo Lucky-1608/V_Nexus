@@ -9,10 +9,18 @@ import { Label } from '@/components/ui/label'
 import { Trash2, Plus, Pencil, Save, X } from 'lucide-react'
 import { createCategory, deleteCategory, updateCategory } from './actions'
 import { ConfirmDeleteDialog } from '@/components/confirm-delete-dialog'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select'
 
 interface Category {
     id: string
     name: string
+    type?: string
 }
 
 export default function CategoriesManager({ categories }: { categories: Category[] | null }) {
@@ -20,6 +28,7 @@ export default function CategoriesManager({ categories }: { categories: Category
     const [isCreating, setIsCreating] = useState(false)
     const [editingId, setEditingId] = useState<string | null>(null)
     const [editName, setEditName] = useState('')
+    const [editType, setEditType] = useState<string>('resource')
     const [deleteId, setDeleteId] = useState<string | null>(null)
 
     const handleCreate = async () => {
@@ -28,6 +37,9 @@ export default function CategoriesManager({ categories }: { categories: Category
         setIsCreating(true)
         const formData = new FormData()
         formData.append('name', newCategoryName)
+        // Default to 'resource' for quick add, or we could add a selector here too.
+        // For now, let's keep quick add simple and let them edit type later, or assume resource.
+        formData.append('type', 'resource')
 
         try {
             await createCategory(formData)
@@ -42,11 +54,13 @@ export default function CategoriesManager({ categories }: { categories: Category
     const startEditing = (category: Category) => {
         setEditingId(category.id)
         setEditName(category.name)
+        setEditType(category.type || 'resource')
     }
 
     const cancelEditing = () => {
         setEditingId(null)
         setEditName('')
+        setEditType('resource')
     }
 
     const handleUpdate = async (id: string) => {
@@ -54,6 +68,7 @@ export default function CategoriesManager({ categories }: { categories: Category
 
         const formData = new FormData()
         formData.append('name', editName)
+        formData.append('type', editType)
 
         try {
             await updateCategory(id, formData)
@@ -105,12 +120,28 @@ export default function CategoriesManager({ categories }: { categories: Category
                             <div key={category.id} className="flex items-center justify-between p-3 border rounded-md">
                                 {editingId === category.id ? (
                                     <div className="flex-1 flex items-center gap-2 mr-2">
-                                        <Input
-                                            value={editName}
-                                            onChange={(e) => setEditName(e.target.value)}
-                                            onKeyDown={(e) => e.key === 'Enter' && handleUpdate(category.id)}
-                                            autoFocus
-                                        />
+                                        <div className="flex-1">
+                                            <Input
+                                                value={editName}
+                                                onChange={(e) => setEditName(e.target.value)}
+                                                onKeyDown={(e) => e.key === 'Enter' && handleUpdate(category.id)}
+                                                autoFocus
+                                                placeholder="Category Name"
+                                            />
+                                        </div>
+                                        <div className="w-[140px]">
+                                            <Select value={editType} onValueChange={setEditType}>
+                                                <SelectTrigger className="h-9">
+                                                    <SelectValue placeholder="Type" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="resource">Resource</SelectItem>
+                                                    <SelectItem value="Finance">Finance</SelectItem>
+                                                    <SelectItem value="Income">Income (Legacy)</SelectItem>
+                                                    <SelectItem value="Expense">Expense (Legacy)</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
                                         <Button size="icon" variant="ghost" onClick={() => handleUpdate(category.id)}>
                                             <Save className="h-4 w-4 text-green-600" />
                                         </Button>
@@ -120,7 +151,14 @@ export default function CategoriesManager({ categories }: { categories: Category
                                     </div>
                                 ) : (
                                     <>
-                                        <span className="font-medium">{category.name}</span>
+                                        <div className="flex items-center gap-2">
+                                            <span className="font-medium">{category.name}</span>
+                                            {category.type && (
+                                                <span className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground uppercase tracking-wider">
+                                                    {category.type}
+                                                </span>
+                                            )}
+                                        </div>
                                         <div className="flex items-center gap-1">
                                             <Button
                                                 variant="ghost"

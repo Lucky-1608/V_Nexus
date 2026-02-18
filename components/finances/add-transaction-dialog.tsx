@@ -26,7 +26,7 @@ import { useSearchParams, useRouter } from 'next/navigation'
 interface Category {
     id: string
     name: string
-    type: 'Income' | 'Expense'
+    type: string
     user_id: string
 }
 
@@ -35,10 +35,7 @@ interface Project {
     name: string
 }
 
-const DEFAULT_CATEGORIES = {
-    Income: ['Salary', 'Freelance', 'Investment', 'Other'],
-    Expense: ['Food', 'Rent', 'Transport', 'Utilities', 'Entertainment', 'Shopping', 'Health', 'Other']
-}
+// Use only custom categories from DB (filtered by server page)
 
 export function AddTransactionDialog({ categories, projects, onAdd }: { categories: Category[], projects?: Project[], onAdd?: (t: any) => void }) {
     const searchParams = useSearchParams()
@@ -58,15 +55,12 @@ export function AddTransactionDialog({ categories, projects, onAdd }: { categori
         }
     }, [searchParams, router])
 
-    // Merge default categories with custom categories from DB
-    const availableCategories = [
-        ...DEFAULT_CATEGORIES[type],
-        ...categories
-            .filter(c => c.type === type && !DEFAULT_CATEGORIES[type].includes(c.name))
-            .map(c => c.name)
-    ].sort()
+    // Although server filters, let's be extra safe here
+    // Filter out any resource categories, just in case
+    const financeCategories = categories.filter(c => ['Income', 'Expense', 'Finance'].includes(c.type))
+    const availableCategories = financeCategories.map(c => c.name).sort()
 
-    // Ensure 'Other' is always at the end
+    // Ensure 'Other' is always at the end, and add 'Create New'
     const sortedCategories = availableCategories.filter(c => c !== 'Other').concat('Other')
     // Remove duplicates just in case
     const uniqueCategories = Array.from(new Set(sortedCategories))
@@ -85,7 +79,7 @@ export function AddTransactionDialog({ categories, projects, onAdd }: { categori
             const customCategory = formData.get('custom_category') as string
 
             let finalCategoryName = categoryName
-            if (categoryName === 'Other' && customCategory && customCategory.trim()) {
+            if ((categoryName === 'Other' || categoryName === '_create_new_') && customCategory && customCategory.trim()) {
                 finalCategoryName = customCategory.trim()
             }
 
@@ -191,21 +185,28 @@ export function AddTransactionDialog({ categories, projects, onAdd }: { categori
                             <SelectTrigger>
                                 <SelectValue placeholder="Select Category" />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent position="popper" viewportClassName="max-h-[200px]">
                                 {uniqueCategories.map(cat => (
                                     <SelectItem key={cat} value={cat}>{cat}</SelectItem>
                                 ))}
+                                <SelectItem value="_create_new_" className="text-primary font-medium border-t mt-1 pt-1">
+                                    + Create New Category
+                                </SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
 
-                    {category === 'Other' && (
-                        <div className="grid gap-2">
-                            <Label htmlFor="custom_category">Custom Name (Optional)</Label>
+                    {(category === 'Other' || category === '_create_new_') && (
+                        <div className="grid gap-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                            <Label htmlFor="custom_category">
+                                {category === '_create_new_' ? 'New Category Name' : 'Custom Name (Optional)'}
+                            </Label>
                             <Input
                                 name="custom_category"
-                                placeholder="e.g. Side Hustle, Gift"
+                                placeholder={category === '_create_new_' ? "e.g. Subscriptions" : "e.g. Side Hustle, Gift"}
                                 className="bg-muted/50"
+                                required={category === '_create_new_'}
+                                autoFocus={category === '_create_new_'}
                             />
                         </div>
                     )}

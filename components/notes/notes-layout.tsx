@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { NoteCard } from './note-card'
 import { NoteEditor } from './note-editor'
-import { StaggerContainer, StaggerItem } from '@/components/ui/entrance'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { deleteNote } from '@/app/dashboard/notes/actions'
 import { useRouter, useSearchParams } from 'next/navigation'
 import {
@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ConfirmDeleteDialog } from '@/components/confirm-delete-dialog'
 import { MoveToCollectionDialog } from '@/components/move-to-collection-dialog'
+import { StaggerContainer, StaggerItem } from '@/components/ui/entrance'
 import { toast } from 'sonner'
 
 interface Note {
@@ -49,6 +50,8 @@ export function NotesLayout({ initialNotes }: NotesLayoutProps) {
 
     const router = useRouter()
     const searchParams = useSearchParams()
+
+    const [isPending, startTransition] = useTransition()
 
     const [optimisticNotes, dispatchOptimistic] = useOptimistic(
         initialNotes,
@@ -108,7 +111,9 @@ export function NotesLayout({ initialNotes }: NotesLayoutProps) {
         setIsDeleting(true)
 
         // Optimistic Delete
-        dispatchOptimistic({ type: 'DELETE', payload: noteToDelete })
+        startTransition(() => {
+            dispatchOptimistic({ type: 'DELETE', payload: noteToDelete })
+        })
 
         if (selectedNote?.id === noteToDelete) {
             setSelectedNote(null)
@@ -139,32 +144,34 @@ export function NotesLayout({ initialNotes }: NotesLayoutProps) {
     }
 
     const handleNoteSaved = (updatedNote: Partial<Note>) => {
-        if (selectedNote && optimisticNotes.some(n => n.id === updatedNote.id)) {
-            // Update
-            const existing = optimisticNotes.find(n => n.id === updatedNote.id)
-            const merged = existing ? { ...existing, ...updatedNote } as Note : { ...updatedNote } as Note
+        startTransition(() => {
+            if (selectedNote && optimisticNotes.some(n => n.id === updatedNote.id)) {
+                // Update
+                const existing = optimisticNotes.find(n => n.id === updatedNote.id)
+                const merged = existing ? { ...existing, ...updatedNote } as Note : { ...updatedNote } as Note
 
-            dispatchOptimistic({ type: 'UPDATE', payload: merged })
-            setSelectedNote(merged)
-        } else {
-            // Create
-            const newNote = updatedNote as Note
-            if (newNote.id && newNote.title) {
-                dispatchOptimistic({ type: 'ADD', payload: newNote })
-                setSelectedNote(newNote)
+                dispatchOptimistic({ type: 'UPDATE', payload: merged })
+                setSelectedNote(merged)
+            } else {
+                // Create
+                const newNote = updatedNote as Note
+                if (newNote.id && newNote.title) {
+                    dispatchOptimistic({ type: 'ADD', payload: newNote })
+                    setSelectedNote(newNote)
+                }
             }
-        }
+        })
         router.refresh()
     }
 
     return (
-        <div className="flex h-[calc(100dvh-6rem)] md:h-[calc(100vh-8rem)] gap-6">
+        <div className="flex h-full gap-6">
             {/* Notes List Sidebar */}
             <div className={cn(
-                "w-full md:w-1/3 flex flex-col gap-4 border-r pr-6",
+                "w-full md:w-1/3 flex flex-col gap-4 border-r pr-6 min-h-0",
                 (selectedNote || isCreating) ? "hidden md:flex" : "flex"
             )}>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between shrink-0">
                     <h2 className="text-2xl font-bold">My Notes</h2>
                     <Button onClick={handleCreateNew} size="sm">
                         <Plus className="h-4 w-4 mr-2" />
@@ -172,7 +179,7 @@ export function NotesLayout({ initialNotes }: NotesLayoutProps) {
                     </Button>
                 </div>
 
-                <div className="relative">
+                <div className="relative shrink-0">
                     <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                         placeholder="Search notes..."
@@ -182,70 +189,74 @@ export function NotesLayout({ initialNotes }: NotesLayoutProps) {
                     />
                 </div>
 
-                <StaggerContainer key={searchQuery} className="flex-1 overflow-y-auto space-y-3 pr-2" animate="show">
-                    {notes.map((note) => (
-                        <StaggerItem key={note.id} className="relative group w-full">
-                            <NoteCard
-                                note={note}
-                                onClick={() => handleSelectNote(note)}
-                            />
-                            <div className="absolute top-2 right-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="ghost" size="icon" className="h-8 w-8 bg-background/50 backdrop-blur-sm hover:bg-background">
-                                            <MoreVertical className="h-4 w-4" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end">
-                                        <DropdownMenuItem
-                                            onClick={(e) => {
-                                                e.stopPropagation()
-                                                setNoteToMove(note.id)
-                                            }}
-                                        >
-                                            <FolderInput className="mr-2 h-4 w-4" />
-                                            Move to Collection
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            onClick={(e) => {
-                                                e.stopPropagation()
-                                                setNoteToDelete(note.id)
-                                            }}
-                                            className="text-red-600 focus:text-red-600"
-                                        >
-                                            <Trash2 className="mr-2 h-4 w-4" />
-                                            Delete
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </div>
-                        </StaggerItem>
-                    ))}
-                    {notes.length === 0 && (
-                        <div className="text-center text-muted-foreground py-10">
-                            {searchQuery ? (
-                                <>
-                                    <p>No notes found matching "{searchQuery}"</p>
-                                    <Button
-                                        variant="link"
-                                        onClick={() => setSearchQuery('')}
-                                        className="mt-2"
-                                    >
-                                        Clear search
-                                    </Button>
-                                </>
-                            ) : (
-                                "No notes yet. Create one to get started!"
+                <div className="flex-1 min-h-0 relative">
+                    <ScrollArea className="h-full w-full pr-4">
+                        <StaggerContainer key={searchQuery} className="space-y-3 pb-4" animate="show" viewport={{ once: true }}>
+                            {notes.map((note) => (
+                                <StaggerItem key={note.id} className="relative group w-full">
+                                    <NoteCard
+                                        note={note}
+                                        onClick={() => handleSelectNote(note)}
+                                    />
+                                    <div className="absolute top-2 right-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="ghost" size="icon" className="h-8 w-8 bg-background/50 backdrop-blur-sm hover:bg-background">
+                                                    <MoreVertical className="h-4 w-4" />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuItem
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        setNoteToMove(note.id)
+                                                    }}
+                                                >
+                                                    <FolderInput className="mr-2 h-4 w-4" />
+                                                    Move to Collection
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        setNoteToDelete(note.id)
+                                                    }}
+                                                    className="text-red-600 focus:text-red-600"
+                                                >
+                                                    <Trash2 className="mr-2 h-4 w-4" />
+                                                    Delete
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </div>
+                                </StaggerItem>
+                            ))}
+                            {notes.length === 0 && (
+                                <div className="text-center text-muted-foreground py-10">
+                                    {searchQuery ? (
+                                        <>
+                                            <p>No notes found matching "{searchQuery}"</p>
+                                            <Button
+                                                variant="link"
+                                                onClick={() => setSearchQuery('')}
+                                                className="mt-2"
+                                            >
+                                                Clear search
+                                            </Button>
+                                        </>
+                                    ) : (
+                                        "No notes yet. Create one to get started!"
+                                    )}
+                                </div>
                             )}
-                        </div>
-                    )}
-                </StaggerContainer>
+                        </StaggerContainer>
+                    </ScrollArea>
+                </div>
             </div>
 
             {/* Editor Area */}
             <div className={cn(
-                "flex-1",
-                (!selectedNote && !isCreating) ? "hidden md:block" : "block w-full"
+                "flex-1 flex flex-col min-h-0",
+                (!selectedNote && !isCreating) ? "hidden md:flex" : "flex w-full"
             )}>
                 {selectedNote || isCreating ? (
                     <NoteEditor

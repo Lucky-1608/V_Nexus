@@ -64,13 +64,13 @@ export default async function CategoriesPage({
                 <h2 className="text-xl font-semibold tracking-tight">Finance Categories</h2>
                 <StaggerContainer key={`finances-${searchQuery}`} className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
                     {categories?.filter((c: any) =>
-                        (c.type === 'Income' || c.type === 'Expense') &&
+                        (c.type === 'Income' || c.type === 'Expense' || c.type === 'Finance') &&
                         (!searchQuery || (c.name?.toLowerCase() || '').includes(searchQuery.toLowerCase()))
                     ).map((category: any) => (
                         <CategoryCard key={category.id} category={category} />
                     ))}
 
-                    {categories?.filter((c: any) => (c.type === 'Income' || c.type === 'Expense') && (!searchQuery || (c.name?.toLowerCase() || '').includes(searchQuery.toLowerCase()))).length === 0 && (
+                    {categories?.filter((c: any) => (c.type === 'Income' || c.type === 'Expense' || c.type === 'Finance') && (!searchQuery || (c.name?.toLowerCase() || '').includes(searchQuery.toLowerCase()))).length === 0 && (
                         <div className="col-span-full text-center text-muted-foreground py-10 border rounded-lg border-dashed">
                             No finance categories found.
                         </div>

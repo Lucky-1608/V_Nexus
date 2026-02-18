@@ -9,7 +9,6 @@ import remarkGfm from 'remark-gfm'
 import remarkBreaks from 'remark-breaks'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { createNote, updateNote } from '@/app/dashboard/notes/actions'
 import { useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
@@ -24,6 +23,8 @@ interface NoteEditorProps {
     onClose?: () => void
     onSave?: (note: { id: string, title: string, content: string, created_at?: string, updated_at?: string }) => void
 }
+
+
 
 export function NoteEditor({ note, onClose, onSave }: NoteEditorProps) {
     const [title, setTitle] = useState(note?.title || '')
@@ -74,8 +75,8 @@ export function NoteEditor({ note, onClose, onSave }: NoteEditorProps) {
     }
 
     return (
-        <div className="flex flex-col h-full gap-4 p-4 border rounded-lg bg-card text-card-foreground shadow-sm">
-            <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-col h-full w-full gap-4 p-4 border rounded-lg bg-card text-card-foreground shadow-sm">
+            <div className="flex items-center justify-between gap-4 shrink-0">
                 <div className="flex items-center gap-2 w-full md:flex-1">
                     <Button variant="ghost" size="icon" className="md:hidden shrink-0" onClick={onClose}>
                         <ArrowLeft className="h-4 w-4" />
@@ -100,40 +101,42 @@ export function NoteEditor({ note, onClose, onSave }: NoteEditorProps) {
                 </div>
             </div>
 
-            <div className="flex-1 h-full border rounded-md overflow-hidden relative">
+            <div className="flex-1 min-h-0 border rounded-md overflow-hidden relative bg-muted/10">
                 {isPreview ? (
-                    <div className="h-full w-full p-4 overflow-auto prose dark:prose-invert max-w-none bg-background text-foreground">
-                        <ReactMarkdown
-                            remarkPlugins={[remarkGfm, remarkBreaks]}
-                            components={{
-                                code({ node, inline, className, children, ...props }: any) {
-                                    const match = /language-(\w+)/.exec(className || '')
-                                    return !inline && match ? (
-                                        <SyntaxHighlighter
-                                            {...props}
-                                            style={atomDark}
-                                            language={match[1]}
-                                            PreTag="div"
-                                        >
-                                            {String(children).replace(/\n$/, '')}
-                                        </SyntaxHighlighter>
-                                    ) : (
-                                        <code {...props} className={className}>
-                                            {children}
-                                        </code>
-                                    )
-                                }
-                            }}
-                        >
-                            {content || '*No content*'}
-                        </ReactMarkdown>
+                    <div className="h-full w-full overflow-y-auto scrollbar-visible p-4">
+                        <div className="prose dark:prose-invert max-w-none bg-transparent">
+                            <ReactMarkdown
+                                remarkPlugins={[remarkGfm, remarkBreaks]}
+                                components={{
+                                    code({ node, inline, className, children, ...props }: any) {
+                                        const match = /language-(\w+)/.exec(className || '')
+                                        return !inline && match ? (
+                                            <SyntaxHighlighter
+                                                {...props}
+                                                style={atomDark}
+                                                language={match[1]}
+                                                PreTag="div"
+                                            >
+                                                {String(children).replace(/\n$/, '')}
+                                            </SyntaxHighlighter>
+                                        ) : (
+                                            <code {...props} className={className}>
+                                                {children}
+                                            </code>
+                                        )
+                                    }
+                                }}
+                            >
+                                {content || '*No content*'}
+                            </ReactMarkdown>
+                        </div>
                     </div>
                 ) : (
                     <textarea
                         placeholder="Write your note here... (Markdown supported)"
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
-                        className="w-full h-full p-4 resize-none bg-transparent border-0 focus:outline-none focus:ring-0 font-mono"
+                        className="absolute inset-0 w-full h-full p-4 resize-none bg-transparent border-0 focus:outline-none focus:ring-0 font-mono overflow-y-scroll scrollbar-visible"
                     />
                 )}
             </div>

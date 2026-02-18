@@ -37,13 +37,8 @@ interface Transaction {
 interface Category {
     id: string
     name: string
-    type: 'Income' | 'Expense'
+    type: string
     user_id: string
-}
-
-const DEFAULT_CATEGORIES = {
-    Income: ['Salary', 'Freelance', 'Investments', 'Gift', 'Other'],
-    Expense: ['Food', 'Transport', 'Rent', 'Utilities', 'Entertainment', 'Shopping', 'Health', 'Other']
 }
 
 interface Project {
@@ -55,24 +50,17 @@ export function EditTransactionDialog({ transaction, categories, projects }: { t
     const [open, setOpen] = useState(false)
     const [type, setType] = useState<'Income' | 'Expense'>(transaction.type as 'Income' | 'Expense')
 
-    // Determine initial category state
-    const incomeCategories = [
-        ...DEFAULT_CATEGORIES['Income'],
-        ...categories.filter(c => c.type === 'Income' && !DEFAULT_CATEGORIES['Income'].includes(c.name)).map(c => c.name)
-    ].sort()
-    const expenseCategories = [
-        ...DEFAULT_CATEGORIES['Expense'],
-        ...categories.filter(c => c.type === 'Expense' && !DEFAULT_CATEGORIES['Expense'].includes(c.name)).map(c => c.name)
-    ].sort()
-
-    const availableCategories = type === 'Income' ? incomeCategories : expenseCategories
+    // Use only custom categories from DB (filtered by server page)
+    // Extra safety filter
+    const financeCategories = categories.filter(c => ['Income', 'Expense', 'Finance'].includes(c.type))
+    const availableCategories = financeCategories.map(c => c.name).sort()
 
     // Ensure 'Other' is always at the end
     const sortedCategories = availableCategories.filter(c => c !== 'Other').concat('Other')
     const uniqueCategories = Array.from(new Set(sortedCategories))
 
-    const isCustomInitially = !uniqueCategories.includes(transaction.category_name) && transaction.category_name !== 'Custom'
-    const [category, setCategory] = useState<string>(isCustomInitially ? 'Custom' : transaction.category_name)
+    const isCustomInitially = !uniqueCategories.includes(transaction.category_name) && transaction.category_name !== 'Other' && transaction.category_name !== '_create_new_'
+    const [category, setCategory] = useState<string>(isCustomInitially ? 'Other' : transaction.category_name)
     const [customCategory, setCustomCategory] = useState<string>(isCustomInitially ? transaction.category_name : '')
 
     // Add transaction has project_id? Need to check Transaction interface and backend data.
@@ -80,10 +68,20 @@ export function EditTransactionDialog({ transaction, categories, projects }: { t
     const [projectId, setProjectId] = useState<string>(transaction.project_id || 'undefined')
 
     async function handleSubmit(formData: FormData) {
-        // If Custom is selected, override the category field with the custom value
-        if (category === 'Custom') {
-            formData.set('category', customCategory)
+        // If Custom/Other is selected, override the category field with the custom value
+        if ((category === 'Other' || category === '_create_new_') && customCategory) {
+            formData.set('category', 'Other') // Allow backend to see it's a custom/new entry flow
+            formData.set('custom_category', customCategory)
+
+            // If it's _create_new_, we might want to ensure backend creates it.
+            // The actions.ts logic handles both 'Other' and '_create_new_' equality check for categoryName.
+            // But we can just set category to '_create_new_' in formData to be explicit if we want, 
+            // OR the backend already checks: if (categoryName === 'Other' || categoryName === '_create_new_') ...
+
+            // Let's set the category field in formData to match the selected value so backend logic triggers.
+            formData.set('category', category)
         }
+
         const result = await updateTransaction(transaction.id, formData)
 
         if (result?.error) {
@@ -181,16 +179,18 @@ export function EditTransactionDialog({ transaction, categories, projects }: { t
                             <SelectTrigger className="col-span-3">
                                 <SelectValue placeholder="Select category" />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent position="popper" viewportClassName="max-h-[200px]">
                                 {uniqueCategories.map(c => (
                                     <SelectItem key={c} value={c}>{c}</SelectItem>
                                 ))}
-                                <SelectItem value="Custom">Custom</SelectItem>
+                                <SelectItem value="_create_new_" className="text-primary font-medium border-t mt-1 pt-1">
+                                    + Create New Category
+                                </SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
 
-                    {category === 'Custom' && (
+                    {(category === 'Other' || category === '_create_new_') && (
                         <div className="grid grid-cols-4 items-center gap-4 animate-in slide-in-from-top-2 fade-in">
                             <Label htmlFor="custom_category" className="text-right">
                                 Name
@@ -199,9 +199,10 @@ export function EditTransactionDialog({ transaction, categories, projects }: { t
                                 id="custom_category"
                                 value={customCategory}
                                 onChange={(e) => setCustomCategory(e.target.value)}
-                                placeholder="Enter custom category name"
+                                placeholder={category === '_create_new_' ? "e.g. Subscriptions" : "Custom Name"}
                                 className="col-span-3"
-                                required
+                                required={category === '_create_new_'}
+                                autoFocus={category === '_create_new_'}
                             />
                         </div>
                     )}

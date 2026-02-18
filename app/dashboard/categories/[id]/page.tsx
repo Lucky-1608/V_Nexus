@@ -20,7 +20,7 @@ export default async function CategoryDetailPage({ params }: { params: { id: str
     }
 
     // Check if it's a finance category
-    const isFinance = category.type === 'Income' || category.type === 'Expense'
+    const isFinance = category.type === 'Income' || category.type === 'Expense' || category.type === 'Finance'
 
     let resources = []
     let transactions = []

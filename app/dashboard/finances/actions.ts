@@ -3,20 +3,22 @@
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 
-async function getOrCreateCategory(supabase: any, user_id: string, name: string, type: string) {
+async function getOrCreateCategory(supabase: any, user_id: string, name: string, _transactionType: string) {
+    // Check for ANY existing finance-related category with this name
     const { data: existing } = await supabase
         .from('categories')
         .select('id')
         .eq('user_id', user_id)
         .eq('name', name)
-        .eq('type', type)
-        .single()
+        .in('type', ['Income', 'Expense', 'Finance'])
+        .limit(1)
 
-    if (existing) return existing.id
+    if (existing && existing.length > 0) return existing[0].id
 
+    // Create new as 'Finance' by default for all transaction types
     const { data: newCategory, error } = await supabase
         .from('categories')
-        .insert({ user_id, name, type })
+        .insert({ user_id, name, type: 'Finance' })
         .select('id')
         .single()
 
@@ -58,9 +60,9 @@ export async function addTransaction(formData: FormData) {
 
         const customCategory = formData.get('custom_category') as string
 
-        // Override category name if "Other" and custom name provided
+        // Override category name if "Other" or "_create_new_" and custom name provided
         let finalCategoryName = categoryName
-        if (categoryName === 'Other' && customCategory && customCategory.trim()) {
+        if ((categoryName === 'Other' || categoryName === '_create_new_') && customCategory && customCategory.trim()) {
             finalCategoryName = customCategory.trim()
         }
 
@@ -141,9 +143,9 @@ export async function updateTransaction(id: string, formData: FormData) {
 
         const customCategory = formData.get('custom_category') as string
 
-        // Override category name if "Other" and custom name provided
+        // Override category name if "Other" or "_create_new_" and custom name provided
         let finalCategoryName = categoryName
-        if (categoryName === 'Other' && customCategory && customCategory.trim()) {
+        if ((categoryName === 'Other' || categoryName === '_create_new_') && customCategory && customCategory.trim()) {
             finalCategoryName = customCategory.trim()
         }
 

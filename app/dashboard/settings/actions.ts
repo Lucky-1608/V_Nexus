@@ -277,10 +277,11 @@ export async function deleteCategory(id: string) {
 export async function updateCategory(id: string, formData: FormData) {
     const supabase = await createClient()
     const name = formData.get('name') as string
+    const type = formData.get('type') as string
 
     const { error } = await supabase
         .from('categories')
-        .update({ name })
+        .update({ name, type })
         .eq('id', id)
 
     if (error) {

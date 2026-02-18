@@ -22,6 +22,7 @@ export default async function FinancesPage() {
         .from('categories')
         .select('*')
         .eq('user_id', user.id)
+        .in('type', ['Income', 'Expense', 'Finance'])
         .order('name', { ascending: true })
 
     if (categoriesError) {

@@ -103,8 +103,7 @@ export function CreateCategoryDialog() {
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="resource">Resource</SelectItem>
-                                        <SelectItem value="Income">Income</SelectItem>
-                                        <SelectItem value="Expense">Expense</SelectItem>
+                                        <SelectItem value="Finance">Finance</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>

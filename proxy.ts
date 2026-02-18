@@ -1,7 +1,7 @@
 import { type NextRequest, userAgent } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
     const { device } = userAgent(request)
     const viewport = device.type === 'mobile' ? 'mobile' : 'desktop'
     request.headers.set('x-device-type', viewport)
