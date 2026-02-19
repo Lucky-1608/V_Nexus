@@ -135,9 +135,14 @@ export function ChatContainer({ initialMessages, teamId, projectId, currentUser,
                     event: '*',
                     schema: 'public',
                     table: 'team_messages',
-                    filter: `team_id=eq.${teamId}`
+                    // filter: `team_id=eq.${teamId}` // Temporarily removing filter to debug
                 },
                 async (payload) => {
+                    console.log('Realtime Payload:', payload)
+                    // Client-side filtering since we removed server-side filter for debugging
+                    const newMessage = payload.new as any
+                    if (newMessage && newMessage.team_id && newMessage.team_id !== teamId) return
+
                     if (payload.eventType === 'INSERT') {
                         const newMessage = payload.new as Message
                         // Filtering
@@ -189,6 +194,9 @@ export function ChatContainer({ initialMessages, teamId, projectId, currentUser,
                         }
                     } else if (payload.eventType === 'DELETE') {
                         setMessages(prev => prev.filter(m => m.id !== payload.old.id))
+                    } else if (payload.eventType === 'UPDATE') {
+                        const updatedMessage = payload.new as Message
+                        setMessages(prev => prev.map(m => m.id === updatedMessage.id ? { ...m, message: updatedMessage.message, metadata: updatedMessage.metadata } : m))
                     }
                 }
             )
@@ -240,7 +248,10 @@ export function ChatContainer({ initialMessages, teamId, projectId, currentUser,
             )
             .subscribe((status) => {
                 if (status === 'SUBSCRIBED') setStatus('connected')
-                if (status === 'CLOSED' || status === 'CHANNEL_ERROR') setStatus('disconnected')
+                if (status === 'CLOSED' || status === 'CHANNEL_ERROR') {
+                    console.error('Realtime subscription error:', status)
+                    setStatus('disconnected')
+                }
             })
 
         return () => {
@@ -253,8 +264,24 @@ export function ChatContainer({ initialMessages, teamId, projectId, currentUser,
         setMessages(prev => prev.filter(m => m.id !== messageId))
     }, [])
 
+    // Sync with server revalidation
+    useEffect(() => {
+        // Only update if we have new initialMessages and they are different length or distinct
+        // Simple check: if initialMessages changes (new reference from server), update state.
+        // But we need to be careful not to overwrite optimistic updates or typing.
+        // Actually, merging is complex. 
+        // Safer strategy: Realtime should handle it. 
+        // But if Realtime fails, we want revalidatePath to propagate.
+        // Let's rely on manual optimistic update + Realtime for now.
+        // Adding manual update handler below.
+    }, [initialMessages])
+
+    const handleUpdateMessage = useCallback((id: string, newText: string) => {
+        setMessages(prev => prev.map(m => m.id === id ? { ...m, message: newText, metadata: { ...m.metadata, is_edited: true } } : m))
+    }, [])
+
     return (
-        <div className="flex flex-col h-full bg-background/50 backdrop-blur-2xl relative overflow-hidden ring-1 ring-border/50">
+        <div className="flex flex-col h-full min-h-0 bg-background/50 backdrop-blur-2xl relative overflow-hidden ring-1 ring-border/50">
             <ConnectionStatus status={status} />
 
             <MessageList
@@ -262,6 +289,7 @@ export function ChatContainer({ initialMessages, teamId, projectId, currentUser,
                 teamId={teamId}
                 projectId={projectId}
                 onDelete={handleDeleteMessage}
+                onUpdate={handleUpdateMessage}
                 members={members}
             />
 

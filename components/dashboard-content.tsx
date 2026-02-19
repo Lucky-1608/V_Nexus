@@ -24,7 +24,7 @@ export function DashboardContent({ children, deviceType }: DashboardContentProps
 
     if (isChat) {
         return (
-            <div className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
+            <div className="flex-1 flex flex-col h-[100dvh] min-h-0 overflow-hidden relative" suppressHydrationWarning>
                 <GridBreakingOverlay />
                 <div className="md:hidden px-4 py-2 text-xs text-muted-foreground shrink-0 select-none">
                     Detected Device: {deviceType}

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { MessageItem, Message } from './MessageItem'
 
 import { differenceInMinutes, isSameDay, isToday, isYesterday, format } from 'date-fns'
@@ -14,18 +14,49 @@ function formatDateLabel(date: Date) {
 import { motion, AnimatePresence } from 'framer-motion'
 
 // Simplified MessageList
-export function MessageList({ messages, teamId, projectId, onDelete, members }: {
+export function MessageList({ messages, teamId, projectId, onDelete, onUpdate, members }: {
     messages: Message[],
     teamId: string,
     projectId?: string,
     onDelete?: (id: string) => void,
+    onUpdate?: (id: string, newText: string) => void,
     members: any[]
 }) {
     const scrollRef = useRef<HTMLDivElement>(null)
 
     // Scroll to bottom when messages change
+    // Scroll to bottom when messages change
+    // Strategies:
+    // 1. Initial load: Scroll to bottom
+    // 2. New message from me: Scroll to bottom
+    // 3. New message from others: Scroll to bottom IF already at bottom, otherwise show indicator (TODO)
+
+    const [shouldAutoScroll, setShouldAutoScroll] = useState(true)
+
+    // Handle scroll events to determine if we should auto-scroll
+    const handleScroll = () => {
+        if (!scrollRef.current) return
+        const { scrollTop, scrollHeight, clientHeight } = scrollRef.current
+        // If within 100px of bottom, auto-scroll is enabled
+        const isAtBottom = scrollHeight - scrollTop - clientHeight < 100
+        setShouldAutoScroll(isAtBottom)
+    }
+
+    // Scroll to bottom on initial mount
     useEffect(() => {
         if (scrollRef.current) {
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+        }
+    }, [])
+
+    // Scroll when messages change
+    useEffect(() => {
+        if (!scrollRef.current) return
+
+        const lastMessage = messages[messages.length - 1]
+        const isMyMessage = lastMessage?.is_sender
+
+        if (shouldAutoScroll || isMyMessage) {
             // Use requestAnimationFrame to ensure DOM is ready
             requestAnimationFrame(() => {
                 if (scrollRef.current) {
@@ -33,7 +64,7 @@ export function MessageList({ messages, teamId, projectId, onDelete, members }: 
                 }
             })
         }
-    }, [messages.length])
+    }, [messages.length, shouldAutoScroll])
 
     // Group messages
     const groupedMessages = messages.map((msg, index) => {
@@ -48,6 +79,7 @@ export function MessageList({ messages, teamId, projectId, onDelete, members }: 
     return (
         <div
             ref={scrollRef}
+            onScroll={handleScroll}
             className="flex-1 min-h-0 w-full overflow-y-auto p-4 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent overscroll-y-contain"
             style={{ WebkitOverflowScrolling: 'touch' }}
         >
@@ -72,7 +104,7 @@ export function MessageList({ messages, teamId, projectId, onDelete, members }: 
                         return (
                             <motion.div
                                 key={msg.id + '-container'}
-                                layout
+                                // layout - Removed to fix scrolling issues
                                 initial={{ opacity: 0, y: 20, scale: 0.95 }}
                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                 transition={{
@@ -96,6 +128,7 @@ export function MessageList({ messages, teamId, projectId, onDelete, members }: 
                                     teamId={teamId}
                                     projectId={projectId}
                                     onDelete={onDelete}
+                                    onUpdate={onUpdate}
                                     members={members}
                                 />
                             </motion.div>

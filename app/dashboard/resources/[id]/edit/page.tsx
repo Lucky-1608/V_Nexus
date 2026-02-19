@@ -16,6 +16,7 @@ export default async function EditResourcePage({ params }: { params: Promise<{ i
     const { data: categories } = await supabase
         .from('categories')
         .select('*')
+        .eq('type', 'resource')
         .order('name', { ascending: true })
 
     if (error || !resource) {

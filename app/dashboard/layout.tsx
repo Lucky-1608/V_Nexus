@@ -10,6 +10,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { DashboardContent } from '@/components/dashboard-content'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { FloatingDock } from '@/components/mobile/floating-dock'
+import { MobileHeader } from '@/components/mobile/mobile-header'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
     const supabase = await createClient()
@@ -39,14 +40,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
                 <ThemeSync userTheme={userSettings?.settings?.theme} userId={user.id} />
 
                 {/* Mobile Header - Cinematic Redesign */}
-                <div className="md:hidden flex items-center justify-between p-4 sticky top-0 z-50">
-                    <Link href="/dashboard" className="font-syne font-bold text-xl tracking-tight text-foreground/90 backdrop-blur-md bg-background/30 rounded-full px-4 py-1.5 border border-white/5 shadow-sm">
-                        V_Nexus
-                    </Link>
-                    <div className="backdrop-blur-md bg-background/30 rounded-full p-1 border border-white/5 shadow-sm">
-                        <ThemeToggle />
-                    </div>
-                </div>
+                <MobileHeader />
 
                 {/* New Floating Dock for Mobile */}
                 <FloatingDock user={user} isAdmin={user.email === process.env.ADMIN_EMAIL} />

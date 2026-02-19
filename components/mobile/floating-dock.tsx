@@ -19,8 +19,11 @@ export function FloatingDock({ user, isAdmin }: FloatingDockProps) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isQuickActionsOpen, setIsQuickActionsOpen] = useState(false);
     const pathname = usePathname();
+    const isChat = pathname?.startsWith('/dashboard/chat');
 
     // Only show on mobile
+    if (isChat) return null;
+
     return (
         <>
             <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[90] md:hidden w-[90%] max-w-[320px] pointer-events-none">

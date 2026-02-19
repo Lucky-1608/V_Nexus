@@ -8,6 +8,7 @@ export default async function NewResourcePage() {
     const { data: categories } = await supabase
         .from('categories')
         .select('*')
+        .eq('type', 'resource')
         .order('name', { ascending: true })
 
     return <ResourceForm initialCategories={categories || []} />

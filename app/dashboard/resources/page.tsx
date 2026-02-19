@@ -17,6 +17,7 @@ export default async function ResourcesPage({
     const { data: categories } = await supabase
         .from('categories')
         .select('*')
+        .eq('type', 'resource')
         .order('name', { ascending: true })
 
     return (

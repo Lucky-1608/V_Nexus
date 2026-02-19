@@ -251,7 +251,7 @@ export async function moveItemToCollection(itemId: string, itemType: string, col
     revalidatePath('/dashboard/paths')
 }
 
-export async function createCategoryAndReturn(name: string) {
+export async function createCategoryAndReturn(name: string, type: string = 'resource') {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
@@ -261,7 +261,7 @@ export async function createCategoryAndReturn(name: string) {
         .from('categories')
         .insert({
             name,
-            type: 'resource',
+            type,
             user_id: user.id
         })
         .select()

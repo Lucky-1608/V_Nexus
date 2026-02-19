@@ -30,7 +30,7 @@ export function EditResourceForm({ resource, initialCategories }: EditResourceFo
 
         setLoading(true)
         try {
-            const newCategory = await createCategoryAndReturn(newCategoryName)
+            const newCategory = await createCategoryAndReturn(newCategoryName, 'resource')
             if (newCategory) {
                 setCategories([...categories, newCategory])
                 setSelectedCategory(newCategory.id)

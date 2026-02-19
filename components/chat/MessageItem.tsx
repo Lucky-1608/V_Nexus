@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { format } from 'date-fns'
-import { MoreHorizontal, SquareCheckBig, Check, CheckCheck, Smile } from 'lucide-react'
+import { MoreHorizontal, SquareCheckBig, Check, CheckCheck, Smile, Copy, Pencil } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -13,7 +13,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { createTaskFromMessage, deleteMessage } from '@/app/dashboard/chat/actions'
+import { createTaskFromMessage, deleteMessage, updateMessage } from '@/app/dashboard/chat/actions'
 import { toast } from 'sonner'
 import { SharedContentCard } from './SharedContentCard'
 import { CreateTaskDialog } from './CreateTaskDialog'
@@ -42,6 +42,7 @@ interface MessageItemProps {
     teamId: string
     projectId?: string
     onDelete?: (id: string) => void
+    onUpdate?: (id: string, newText: string) => void
     members?: any[]
 }
 
@@ -74,15 +75,57 @@ const renderMessageWithMentions = (text: string, mentions: string[] | undefined,
     })
 }
 
-export function MessageItem({ message, isConsecutive, teamId, projectId, onDelete, members = [] }: MessageItemProps) {
+export function MessageItem({ message, isConsecutive, teamId, projectId, onDelete, onUpdate, members = [] }: MessageItemProps) {
     const isSender = message.is_sender
     const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false)
+    const [isEditing, setIsEditing] = useState(false)
+    const [editMessage, setEditMessage] = useState(message.message)
+    const [isSaving, setIsSaving] = useState(false)
 
     // Format time
     const time = format(new Date(message.created_at), 'p')
 
     const handleCreateTask = () => {
         setIsCreateTaskOpen(true)
+    }
+
+    const handleCopy = () => {
+        navigator.clipboard.writeText(message.message)
+        toast.success("Message copied to clipboard")
+    }
+
+    const handleEdit = () => {
+        setIsEditing(true)
+        setEditMessage(message.message)
+    }
+
+    const handleCancelEdit = () => {
+        setIsEditing(false)
+        setEditMessage(message.message)
+    }
+
+    const handleSaveEdit = async () => {
+        if (!editMessage.trim() || editMessage === message.message) {
+            setIsEditing(false)
+            return
+        }
+
+        setIsSaving(true)
+        try {
+            // Optimistic update
+            onUpdate?.(message.id, editMessage)
+
+            await updateMessage(message.id, teamId, editMessage)
+            setIsEditing(false)
+            toast.success("Message updated")
+        } catch (e) {
+            console.error("Failed to update message", e)
+            toast.error("Failed to update message")
+            // Revert optimistic update if possible? 
+            // Current strict logic implies we trust it works or realtime reverts it if it bounces.
+        } finally {
+            setIsSaving(false)
+        }
     }
 
     const handleDelete = async () => {
@@ -109,7 +152,7 @@ export function MessageItem({ message, isConsecutive, teamId, projectId, onDelet
                 )}
                 {!isSender && isConsecutive && <div className="w-8" />}
 
-                <div className={cn("flex flex-col", isSender ? "items-end" : "items-start")}>
+                <div className={cn("flex flex-col", isSender ? "items-end" : "items-start", "w-full")}>
                     {/* Sender Name - only if not consecutive and not me */}
                     {!isSender && !isConsecutive && (
                         <span className="text-xs text-muted-foreground ml-1 mb-1">
@@ -117,54 +160,99 @@ export function MessageItem({ message, isConsecutive, teamId, projectId, onDelet
                         </span>
                     )}
 
-                    <div className="relative group/msg">
-                        <div
-                            className={cn(
-                                "px-4 py-2 rounded-2xl text-sm shadow-sm relative transition-all duration-300 group-hover/msg:shadow-md",
-                                isSender
-                                    ? "bg-primary text-primary-foreground rounded-tr-sm border border-white/10 hover:scale-[1.01] shadow-indigo-500/10"
-                                    : "bg-card backdrop-blur-xl border border-border/50 text-card-foreground rounded-tl-sm hover:scale-[1.01]"
-                            )}
-                        >
-                            {renderMessageWithMentions(message.message, message.metadata?.mentions, isSender || false)}
-                        </div>
+                    <div className="relative group/msg max-w-full">
+                        {isEditing ? (
+                            <div className={cn(
+                                "p-2 rounded-2xl text-sm shadow-sm relative bg-card border border-primary/20 min-w-[200px]",
+                                isSender ? "rounded-tr-sm" : "rounded-tl-sm"
+                            )}>
+                                <textarea
+                                    value={editMessage}
+                                    onChange={(e) => setEditMessage(e.target.value)}
+                                    className="w-full bg-transparent border-none outline-none resize-none text-foreground min-h-[60px]"
+                                    autoFocus
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter' && !e.shiftKey) {
+                                            e.preventDefault()
+                                            handleSaveEdit()
+                                        } else if (e.key === 'Escape') {
+                                            handleCancelEdit()
+                                        }
+                                    }}
+                                />
+                                <div className="flex justify-end gap-2 mt-2">
+                                    <Button size="sm" variant="ghost" onClick={handleCancelEdit} disabled={isSaving} className="h-6 text-xs">
+                                        Cancel
+                                    </Button>
+                                    <Button size="sm" onClick={handleSaveEdit} disabled={isSaving} className="h-6 text-xs">
+                                        Save
+                                    </Button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div
+                                className={cn(
+                                    "px-4 py-2 rounded-2xl text-sm shadow-sm relative transition-all duration-300 group-hover/msg:shadow-md",
+                                    isSender
+                                        ? "bg-primary text-primary-foreground rounded-tr-sm border border-white/10 hover:scale-[1.01] shadow-indigo-500/10"
+                                        : "bg-card backdrop-blur-xl border border-border/50 text-card-foreground rounded-tl-sm hover:scale-[1.01]"
+                                )}
+                            >
+                                {renderMessageWithMentions(message.message, message.metadata?.mentions, isSender || false)}
+                                {message.metadata?.is_edited && (
+                                    <span className="text-[10px] opacity-70 italic ml-1">(edited)</span>
+                                )}
+                            </div>
+                        )}
 
                         {/* Actions Overlay */}
-                        <div className={cn(
-                            "absolute top-0 opacity-0 group-hover/msg:opacity-100 transition-opacity flex items-center gap-1",
-                            isSender ? "-left-14" : "-right-14"
-                        )}>
-                            {/* Add Task Quick Action */}
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-6 w-6 rounded-full bg-background border border-border shadow-sm"
-                                title="Create Task"
-                                onClick={handleCreateTask}
-                            >
-                                <SquareCheckBig className="h-3 w-3" />
-                            </Button>
+                        {!isEditing && (
+                            <div className={cn(
+                                "absolute top-0 opacity-0 group-hover/msg:opacity-100 transition-opacity flex items-center gap-1",
+                                isSender ? "-left-20" : "-right-20"
+                            )}>
+                                {/* Add Task Quick Action */}
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-6 w-6 rounded-full bg-background border border-border shadow-sm"
+                                    title="Create Task"
+                                    onClick={handleCreateTask}
+                                >
+                                    <SquareCheckBig className="h-3 w-3" />
+                                </Button>
 
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full bg-background border border-border shadow-sm">
-                                        <MoreHorizontal className="h-3 w-3" />
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align={isSender ? 'end' : 'start'}>
-                                    <DropdownMenuItem onClick={handleCreateTask}>
-                                        <SquareCheckBig className="mr-2 h-4 w-4" />
-                                        Create Task
-                                    </DropdownMenuItem>
-                                    <DropdownMenuSeparator />
-                                    {isSender && (
-                                        <DropdownMenuItem className="text-destructive" onClick={handleDelete}>
-                                            Delete Message
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full bg-background border border-border shadow-sm">
+                                            <MoreHorizontal className="h-3 w-3" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align={isSender ? 'end' : 'start'}>
+                                        <DropdownMenuItem onClick={handleCopy}>
+                                            <Copy className="mr-2 h-4 w-4" />
+                                            Copy Text
                                         </DropdownMenuItem>
-                                    )}
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        </div>
+                                        <DropdownMenuItem onClick={handleCreateTask}>
+                                            <SquareCheckBig className="mr-2 h-4 w-4" />
+                                            Create Task
+                                        </DropdownMenuItem>
+                                        {isSender && (
+                                            <>
+                                                <DropdownMenuItem onClick={handleEdit}>
+                                                    <Pencil className="mr-2 h-4 w-4" />
+                                                    Edit Message
+                                                </DropdownMenuItem>
+                                                <DropdownMenuSeparator />
+                                                <DropdownMenuItem className="text-destructive" onClick={handleDelete}>
+                                                    Delete Message
+                                                </DropdownMenuItem>
+                                            </>
+                                        )}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
+                        )}
                     </div>
 
                     {/* Shared Content Card */}

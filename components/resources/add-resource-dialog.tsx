@@ -43,7 +43,7 @@ export function AddResourceDialog({ categories: initialCategories, onAdd }: { ca
 
         setLoading(true)
         try {
-            const newCategory = await createCategoryAndReturn(newCategoryName)
+            const newCategory = await createCategoryAndReturn(newCategoryName, 'resource')
             if (newCategory) {
                 setCategories([...categories, newCategory])
                 setSelectedCategory(newCategory.id)
