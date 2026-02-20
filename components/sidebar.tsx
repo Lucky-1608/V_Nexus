@@ -55,7 +55,7 @@ export function Sidebar({ className, isAdmin }: SidebarProps) {
 
     return (
         <div className={cn(
-            'group flex flex-col h-[calc(100vh-2rem)] m-4 rounded-2xl border border-white/10 bg-sidebar/60 backdrop-blur-2xl shadow-2xl transition-all duration-500 ease-out hover:bg-sidebar/80 hover:shadow-primary/5 hover:border-sidebar-border/50',
+            'group flex flex-col h-[calc(100vh-2rem)] m-4 rounded-2xl border border-white/10 dark:border-white/5 bg-white/10 dark:bg-black/20 backdrop-blur-xl shadow-2xl transition-all duration-500 ease-out hover:bg-white/20 hover:dark:bg-black/30',
             className
         )}>
             <ScrollArea className="flex-1 pr-1">
@@ -153,7 +153,7 @@ export function Sidebar({ className, isAdmin }: SidebarProps) {
                     </div>
                 </div>
             </ScrollArea>
-            <div className="p-4 border-t/50 flex items-center gap-2 bg-background/20 backdrop-blur-md rounded-b-xl">
+            <div className="p-4 border-t border-white/10 dark:border-white/5 flex items-center gap-2 rounded-b-xl">
                 <ThemeToggle />
                 <AlertDialog>
                     <AlertDialogTrigger asChild>

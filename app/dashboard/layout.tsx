@@ -31,7 +31,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
     return (
         <div className="flex min-h-screen relative">
             {/* Desktop Sidebar - Fixed Position */}
-            <aside className="hidden md:block w-64 fixed top-0 left-0 h-screen z-40 bg-background/50 backdrop-blur-md border-r">
+            <aside className="hidden md:block w-64 fixed top-0 left-0 h-screen z-40 bg-transparent border-none">
                 <Sidebar isAdmin={user.email === process.env.ADMIN_EMAIL} className="h-full" />
             </aside>
 

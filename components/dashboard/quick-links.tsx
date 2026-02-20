@@ -16,7 +16,7 @@ export async function QuickLinks({ userId }: { userId: string }) {
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 <HoverEffect variant="glow" className="col-span-2 md:col-span-2 lg:col-span-2 relative group overflow-hidden rounded-xl">
                     <Link href="/dashboard/paths" className="block h-full w-full">
-                        <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 to-purple-700 opacity-90 group-hover:opacity-100 transition-opacity" />
+                        <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 to-cyan-700 opacity-90 group-hover:opacity-100 transition-opacity" />
                         <div className="relative z-10 p-6 h-full flex flex-col justify-between text-white">
                             <Route className="h-8 w-8 text-white/80" />
                             <div>

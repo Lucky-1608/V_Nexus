@@ -103,7 +103,7 @@ export function NoteEditor({ note, onClose, onSave }: NoteEditorProps) {
 
             <div className="flex-1 min-h-0 border rounded-md overflow-hidden relative bg-muted/10">
                 {isPreview ? (
-                    <div className="h-full w-full overflow-y-auto scrollbar-visible p-4">
+                    <div className="h-full w-full overflow-y-auto scrollbar-visible p-4" data-lenis-prevent>
                         <div className="prose dark:prose-invert max-w-none bg-transparent">
                             <ReactMarkdown
                                 remarkPlugins={[remarkGfm, remarkBreaks]}
@@ -133,6 +133,7 @@ export function NoteEditor({ note, onClose, onSave }: NoteEditorProps) {
                     </div>
                 ) : (
                     <textarea
+                        data-lenis-prevent
                         placeholder="Write your note here... (Markdown supported)"
                         value={content}
                         onChange={(e) => setContent(e.target.value)}

@@ -125,7 +125,7 @@ export default function LandingPage() {
                 description="Keep your finances in check. Track income, expenses, and visualize your savings goals."
               />
               <FeatureCard
-                icon={<BookOpen className="text-purple-500" size={32} />}
+                icon={<BookOpen className="text-cyan-500" size={32} />}
                 title="Knowledge Base"
                 description="A second brain for your ideas. Create notes, organize resources, and never lose a thought."
               />

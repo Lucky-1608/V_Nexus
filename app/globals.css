@@ -47,22 +47,21 @@
 }
 
 :root {
-  --radius: 1rem;
+  --radius: 12px;
+  /* Soft radius */
+
   /* Light Mode - Refined Editorial Aesthetic */
   --background: oklch(0.98 0.01 260);
-  /* Slate-50 soft white */
   --foreground: oklch(0.15 0.02 260);
-  /* Deep space indigo text */
 
-  --card: oklch(1 0 0 / 0.4);
-  /* Frosted white glass */
+  --card: oklch(1 0 0 / 0.5);
   --card-foreground: oklch(0.15 0.02 260);
 
   --popover: oklch(1 0 0 / 0.85);
   --popover-foreground: oklch(0.15 0.02 260);
 
   --primary: oklch(0.6 0.25 260);
-  /* Premium Indigo */
+  /* Primary Accent: Indigo */
   --primary-foreground: oklch(0.98 0.01 260);
 
   --secondary: oklch(0.92 0.01 260);
@@ -72,7 +71,7 @@
   --muted-foreground: oklch(0.4 0.02 260);
 
   --accent: oklch(0.75 0.15 190);
-  /* Soft Cyan Accent */
+  /* Secondary Accent: Cyan */
   --accent-foreground: oklch(0.1 0.02 260);
 
   --destructive: oklch(0.55 0.22 25);
@@ -82,9 +81,11 @@
   --input: oklch(0 0 0 / 4%);
   --ring: oklch(0.6 0.25 260 / 0.3);
 
-  /* Chart colors - Premium Pastel/Soft */
+  /* Chart colors - Using 2 main accents */
   --chart-1: oklch(0.6 0.25 260);
-  --chart-2: oklch(0.7 0.15 190);
+  /* Primary */
+  --chart-2: oklch(0.75 0.15 190);
+  /* Accent */
   --chart-3: oklch(0.8 0.1 120);
   --chart-4: oklch(0.65 0.2 330);
   --chart-5: oklch(0.7 0.15 20);
@@ -98,14 +99,15 @@
   --sidebar-border: oklch(0 0 0 / 5%);
   --sidebar-ring: oklch(0.6 0.25 260 / 0.3);
 
-  /* Light Mode Cursor (Same as Dark Mode) */
+  /* Micro-interactions timeline */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Cursors */
   --cursor-default: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='oklch(0.6%200.25%20260)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m3 3 7.07 16.97 2.51-7.39 7.39-2.51L3 3z'/%3E%3C/svg%3E") 0 0, auto;
   --cursor-pointer: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='oklch(0.6%200.25%20260)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='6'/%3E%3C/svg%3E") 12 12, pointer;
-
-  /* Text Cursor - Light Mode (Indigo to match primary) */
   --cursor-text: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%234f46e5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 4h8'/%3E%3Cpath d='M12 4v16'/%3E%3Cpath d='M8 20h8'/%3E%3C/svg%3E") 12 12, text;
   --caret-color: #4f46e5;
-  /* Indigo-600 */
 }
 
 .dark {
@@ -113,14 +115,14 @@
   --background: oklch(0.05 0.02 260);
   --foreground: oklch(0.98 0.01 260);
 
-  --card: oklch(1 0 0 / 0.03);
+  --card: oklch(1 0 0 / 0.05);
   --card-foreground: oklch(0.98 0.01 260);
 
   --popover: oklch(0.08 0.03 260 / 0.9);
   --popover-foreground: oklch(0.98 0.01 260);
 
   --primary: oklch(0.65 0.25 260);
-  /* Vibrant Indigo */
+  /* Primary Accent: Indigo */
   --primary-foreground: oklch(1 0 0);
 
   --secondary: oklch(0.15 0.05 260);
@@ -130,7 +132,7 @@
   --muted-foreground: oklch(0.7 0.05 260);
 
   --accent: oklch(0.85 0.15 190);
-  /* Sharp Cyan Accent */
+  /* Secondary Accent: Cyan */
   --accent-foreground: oklch(0.05 0.02 260);
 
   --border: oklch(1 0 0 / 10%);
@@ -148,11 +150,8 @@
 
   --cursor-default: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='oklch(0.65%200.25%20260)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m3 3 7.07 16.97 2.51-7.39 7.39-2.51L3 3z'/%3E%3C/svg%3E") 0 0, auto;
   --cursor-pointer: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='oklch(0.65%200.25%20260)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='6'/%3E%3C/svg%3E") 12 12, pointer;
-
-  /* Text Cursor - Dark Mode (Cyan for high contrast) */
   --cursor-text: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2322d3ee' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 4h8'/%3E%3Cpath d='M12 4v16'/%3E%3Cpath d='M8 20h8'/%3E%3C/svg%3E") 12 12, text;
   --caret-color: #22d3ee;
-  /* Cyan-400 */
 }
 
 @theme inline {
@@ -265,85 +264,57 @@
 
   html,
   body {
-    @apply bg-background text-foreground font-sans selection:bg-primary/30;
+    @apply text-foreground font-sans selection:bg-primary/30;
     cursor: var(--cursor-default);
     font-feature-settings: "ss01", "ss02", "cv01", "cv02";
     position: relative;
     overflow-x: hidden;
+    line-height: 1.5;
+    /* Proper reading line height */
+    background-color: transparent;
+    /* Allow wrapper to show through */
   }
 
-  /* Atmospheric Noise Overlay - Refined */
-  body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 50;
-    opacity: 0.3;
-    mix-blend-mode: overlay;
+  /* Core typography scaling */
+  .text-xs {
+    font-size: 12px;
   }
 
-  /* Vibrant Gradient Mesh - Light Mode */
-  :root:not(.dark) body::after {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background:
-      radial-gradient(circle at 10% 20%, oklch(0.95 0.05 200 / 0.4), transparent 40%),
-      radial-gradient(circle at 90% 80%, oklch(0.95 0.05 0 / 0.4), transparent 40%),
-      radial-gradient(circle at 50% 50%, oklch(0.98 0.02 260 / 0.8), transparent 60%),
-      conic-gradient(from 0deg at 50% 50%, oklch(0.98 0.01 260), oklch(0.95 0.02 240), oklch(0.98 0.01 260));
-    pointer-events: none;
-    z-index: -1;
-    filter: blur(60px) contrast(1.2);
-    /* Subtle movement */
-    animation: background-drift-light 30s ease-in-out infinite alternate;
+  .text-sm {
+    font-size: 14px;
   }
 
-  /* Deep Space Nebula - Dark Mode */
-  .dark body::after {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background:
-      radial-gradient(circle at 20% 30%, oklch(0.2 0.1 260 / 0.2), transparent 50%),
-      radial-gradient(circle at 80% 70%, oklch(0.15 0.1 300 / 0.2), transparent 50%),
-      radial-gradient(circle at 50% 50%, oklch(0.05 0.02 260), transparent 80%),
-      conic-gradient(from 180deg at 50% 50%, oklch(0.05 0.02 260), oklch(0.08 0.03 280), oklch(0.05 0.02 260));
-    pointer-events: none;
-    z-index: -1;
-    filter: blur(80px);
-    animation: background-drift-dark 40s ease-in-out infinite alternate;
+  .text-base {
+    font-size: 16px;
   }
 
-  @keyframes background-drift-light {
-    0% {
-      transform: scale(1) translate(0, 0);
-    }
-
-    100% {
-      transform: scale(1.1) translate(-2%, -2%);
-    }
+  .text-lg {
+    font-size: 20px;
   }
 
-  @keyframes background-drift-dark {
-    0% {
-      transform: scale(1) translate(0, 0);
-    }
+  .text-xl {
+    font-size: 24px;
+  }
 
-    100% {
-      transform: scale(1.15) translate(2%, 2%);
-    }
+  .text-2xl {
+    font-size: 32px;
+  }
+
+  .text-3xl,
+  .text-4xl,
+  .text-5xl {
+    font-size: 48px;
+  }
+
+  /* max size */
+
+  a,
+  button,
+  [role="button"],
+  input,
+  select,
+  textarea {
+    transition: all var(--transition-fast);
   }
 
   a,
@@ -368,6 +339,10 @@
   h5,
   h6 {
     @apply font-bold tracking-tight;
+    line-height: 1.15;
+    /* Tight line height for headings */
+    font-family: var(--font-instrument);
+    /* Dedicated heading font */
   }
 
   h1 {

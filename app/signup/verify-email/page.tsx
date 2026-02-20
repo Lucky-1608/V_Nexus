@@ -52,7 +52,7 @@ export default function VerifyEmailPage() {
     return (
         <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black p-4">
             {/* Background Gradients */}
-            <div className="absolute top-[-20%] left-[-10%] w-[700px] h-[700px] rounded-full bg-purple-500/20 blur-[100px] animate-pulse" />
+            <div className="absolute top-[-20%] left-[-10%] w-[700px] h-[700px] rounded-full bg-cyan-500/20 blur-[100px] animate-pulse" />
             <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full bg-blue-500/20 blur-[100px] animate-pulse delay-700" />
 
             <Suspense fallback={<div>Loading...</div>}>

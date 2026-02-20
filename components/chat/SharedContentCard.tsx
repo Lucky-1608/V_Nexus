@@ -18,7 +18,7 @@ export function SharedContentCard({ attachment }: { attachment: { type: string, 
     switch (type) {
         case 'resource':
             icon = <Book className="h-4 w-4" />
-            color = "bg-purple-500/10 text-purple-500"
+            color = "bg-cyan-500/10 text-cyan-500"
             break
         case 'note':
             icon = <FileText className="h-4 w-4" />

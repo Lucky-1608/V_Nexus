@@ -96,7 +96,7 @@ export default async function ResourceDetailPage({ params }: { params: { id: str
 
                 {/* Sidebar Actions (1 col) */}
                 <div className="space-y-4">
-                    <Card className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950 dark:to-purple-950 border-indigo-200 dark:border-indigo-800">
+                    <Card className="bg-gradient-to-br from-indigo-50 to-cyan-50 dark:from-indigo-950 dark:to-cyan-950 border-indigo-200 dark:border-indigo-800">
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
                                 <Sparkles className="h-5 w-5 text-indigo-500" />
