@@ -64,7 +64,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@types/colorthief": "^2.6.0",
+    "@types/colorthief": "^2.6.1",
     "@types/node": "^20.19.27",
     "@types/react": "^19",
     "@types/react-dom": "^19",
