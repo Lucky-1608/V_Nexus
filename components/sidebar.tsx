@@ -65,12 +65,12 @@ export function Sidebar({ className, isAdmin }: SidebarProps) {
                             <div className="relative h-9 w-9 rounded-lg overflow-hidden shadow-sm">
                                 <Image
                                     src="/logo.svg"
-                                    alt="V_Nexus Logo"
+                                    alt="V Logo"
                                     fill
                                     className="object-cover"
                                 />
                             </div>
-                            V_Nexus
+                            V
                         </h2>
                     </Link>
                     <div className="space-y-1">

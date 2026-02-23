@@ -46,7 +46,7 @@ export default function VerifiedPage() {
                     transition={{ delay: 0.5 }}
                     className="text-zinc-500 text-lg mb-8"
                 >
-                    Your access to V_Nexus has been confirmed.
+                    Your access to V has been confirmed.
                 </motion.p>
 
                 <motion.div
@@ -67,7 +67,7 @@ export default function VerifiedPage() {
             <div className="absolute bottom-8 left-0 right-0 flex justify-center opacity-30">
                 <div className="flex items-center gap-2">
                     <Command size={14} />
-                    <span className="font-syne text-xs tracking-widest uppercase">V_Nexus</span>
+                    <span className="font-syne text-xs tracking-widest uppercase">V</span>
                 </div>
             </div>
         </div>

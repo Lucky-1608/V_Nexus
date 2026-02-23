@@ -21,7 +21,7 @@ export async function ResourceStats({ userId }: { userId: string }) {
         <div className="grid grid-cols-2 gap-4 h-full">
             <HoverEffect variant="lift" className="h-full">
                 <Link href="/dashboard/resources" className="block h-full">
-                    <SpotlightCard className="h-full flex flex-col justify-center items-center text-center p-4">
+                    <SpotlightCard className="h-full flex flex-col justify-center items-center text-center p-4 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-500/20">
                         <div className="h-10 w-10 rounded-full bg-blue-500/10 flex items-center justify-center mb-2">
                             <Library className="h-5 w-5 text-blue-500" />
                         </div>
@@ -32,7 +32,7 @@ export async function ResourceStats({ userId }: { userId: string }) {
             </HoverEffect>
             <HoverEffect variant="lift" className="h-full">
                 <Link href="/dashboard/notes" className="block h-full">
-                    <SpotlightCard className="h-full flex flex-col justify-center items-center text-center p-4">
+                    <SpotlightCard className="h-full flex flex-col justify-center items-center text-center p-4 bg-gradient-to-br from-orange-500/10 to-cyan-500/10 border-orange-500/20">
                         <div className="h-10 w-10 rounded-full bg-orange-500/10 flex items-center justify-center mb-2">
                             <StickyNote className="h-5 w-5 text-orange-500" />
                         </div>

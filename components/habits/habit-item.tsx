@@ -65,7 +65,7 @@ export function HabitItem({ habit }: { habit: Habit }) {
 
     return (
         <HoverEffect variant="lift" className="h-full">
-            <SpotlightCard className="h-full transition-colors hover:border-primary/50">
+            <SpotlightCard className="transition-all hover:shadow-md cursor-pointer hover:bg-accent/50 bg-gradient-to-br from-indigo-500/10 to-cyan-500/10 border-indigo-500/20">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
                         {habit.name}

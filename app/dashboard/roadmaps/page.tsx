@@ -62,7 +62,7 @@ export default async function RoadmapsPage({
                 ).map((roadmap: any) => (
                     <StaggerItem key={roadmap.id} className="h-full">
                         <Link href={`/dashboard/roadmaps/${roadmap.id}`}>
-                            <SpotlightCard className="h-full hover:border-primary/50 transition-colors cursor-pointer group">
+                            <SpotlightCard className="h-full hover:shadow-md transition-all cursor-pointer group bg-gradient-to-br from-indigo-500/10 to-cyan-500/10 border-indigo-500/20">
                                 <CardHeader>
                                     <CardTitle className="line-clamp-1 group-hover:text-primary transition-colors">{roadmap.title}</CardTitle>
                                     <CardDescription className="line-clamp-2 min-h-[40px]">

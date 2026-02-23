@@ -88,7 +88,7 @@ export function TransactionList({ transactions, categories, projects }: { transa
     }, [])
 
     return (
-        <SpotlightCard className="col-span-3">
+        <SpotlightCard className="col-span-3 bg-gradient-to-br from-indigo-500/10 to-cyan-500/10 border-indigo-500/20">
             <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0 pb-4">
                 <CardTitle>Transactions</CardTitle>
                 <div className="flex flex-wrap items-center gap-2">

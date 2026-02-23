@@ -56,7 +56,7 @@ export function FinanceOverview({ transactions }: { transactions: Transaction[] 
     return (
         <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-7">
             <div className="col-span-1 md:col-span-2 lg:col-span-4 grid gap-4 grid-cols-1 md:grid-cols-3">
-                <SpotlightCard>
+                <SpotlightCard className="bg-gradient-to-br from-green-500/10 to-cyan-500/10 border-green-500/20">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Total Income</CardTitle>
                     </CardHeader>
@@ -64,7 +64,7 @@ export function FinanceOverview({ transactions }: { transactions: Transaction[] 
                         <div className="text-2xl font-bold text-green-600 dark:text-green-400">+{formatCurrency(totalIncome)}</div>
                     </CardContent>
                 </SpotlightCard>
-                <SpotlightCard>
+                <SpotlightCard className="bg-gradient-to-br from-red-500/10 to-cyan-500/10 border-red-500/20">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Total Expenses</CardTitle>
                     </CardHeader>
@@ -72,7 +72,7 @@ export function FinanceOverview({ transactions }: { transactions: Transaction[] 
                         <div className="text-2xl font-bold text-red-600 dark:text-red-400">-{formatCurrency(Math.abs(totalExpenses))}</div>
                     </CardContent>
                 </SpotlightCard>
-                <SpotlightCard>
+                <SpotlightCard className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-500/20">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Net Balance</CardTitle>
                     </CardHeader>
@@ -83,7 +83,7 @@ export function FinanceOverview({ transactions }: { transactions: Transaction[] 
                     </CardContent>
                 </SpotlightCard>
 
-                <SpotlightCard className="col-span-1 md:col-span-3">
+                <SpotlightCard className="col-span-1 md:col-span-3 bg-gradient-to-br from-purple-500/10 to-cyan-500/10 border-purple-500/20">
                     <CardHeader>
                         <CardTitle>Breakdown</CardTitle>
                     </CardHeader>

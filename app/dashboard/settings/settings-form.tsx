@@ -156,7 +156,7 @@ export default function SettingsForm({ user }: { user: any }) {
     return (
         <div className="space-y-8">
             {/* SECTION 1: Account & Profile */}
-            <SpotlightCard>
+            <SpotlightCard className="bg-gradient-to-br from-indigo-500/10 to-cyan-500/10 border-indigo-500/20">
                 <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
                     <div className="space-y-1">
                         <CardTitle>Account & Profile</CardTitle>
@@ -234,7 +234,7 @@ export default function SettingsForm({ user }: { user: any }) {
             </SpotlightCard>
 
             {/* SECTION: Security */}
-            <SpotlightCard>
+            <SpotlightCard className="bg-gradient-to-br from-violet-500/10 to-cyan-500/10 border-violet-500/20">
                 <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
                     <div className="space-y-1">
                         <CardTitle>Security</CardTitle>
@@ -284,7 +284,7 @@ export default function SettingsForm({ user }: { user: any }) {
             </SpotlightCard>
 
             {/* SECTION 2: Learning Preferences */}
-            <SpotlightCard>
+            <SpotlightCard className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-500/20">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <div className="space-y-1">
                         <CardTitle>Learning Preferences</CardTitle>
@@ -361,7 +361,7 @@ export default function SettingsForm({ user }: { user: any }) {
             </SpotlightCard>
 
             {/* SECTION 3: AI Settings */}
-            <SpotlightCard>
+            <SpotlightCard className="bg-gradient-to-br from-purple-500/10 to-cyan-500/10 border-purple-500/20">
                 <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
                     <div className="space-y-1">
                         <CardTitle>AI Settings</CardTitle>
@@ -424,7 +424,7 @@ export default function SettingsForm({ user }: { user: any }) {
             </SpotlightCard>
 
             {/* SECTION 4: Resource & Content */}
-            <SpotlightCard>
+            <SpotlightCard className="bg-gradient-to-br from-green-500/10 to-cyan-500/10 border-green-500/20">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle>Resource Settings</CardTitle>
                     <SavedBadge section="resources" />
@@ -459,7 +459,7 @@ export default function SettingsForm({ user }: { user: any }) {
             </SpotlightCard>
 
             {/* SECTION 5: 3D & Animation */}
-            <SpotlightCard>
+            <SpotlightCard className="bg-gradient-to-br from-orange-500/10 to-cyan-500/10 border-orange-500/20">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle>3D & Animation</CardTitle>
                     <SavedBadge section="3d" />
@@ -500,7 +500,7 @@ export default function SettingsForm({ user }: { user: any }) {
             </SpotlightCard>
 
             {/* SECTION 6: Notifications */}
-            <SpotlightCard>
+            <SpotlightCard className="bg-gradient-to-br from-teal-500/10 to-cyan-500/10 border-teal-500/20">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle>Notifications</CardTitle>
                     <SavedBadge section="notifications" />
@@ -534,7 +534,7 @@ export default function SettingsForm({ user }: { user: any }) {
             </SpotlightCard>
 
             {/* SECTION 9: Appearance */}
-            <SpotlightCard>
+            <SpotlightCard className="bg-gradient-to-br from-pink-500/10 to-cyan-500/10 border-pink-500/20">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle>Appearance</CardTitle>
                     <SavedBadge section="appearance" />
@@ -616,7 +616,7 @@ export default function SettingsForm({ user }: { user: any }) {
             </SpotlightCard>
 
             {/* SECTION 8: Privacy & Data */}
-            <SpotlightCard>
+            <SpotlightCard className="bg-gradient-to-br from-yellow-500/10 to-cyan-500/10 border-yellow-500/20">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle>Privacy & Data</CardTitle>
                 </CardHeader>
@@ -639,7 +639,7 @@ export default function SettingsForm({ user }: { user: any }) {
             </SpotlightCard>
 
             {/* SECTION 7: Planner & Productivity */}
-            <SpotlightCard>
+            <SpotlightCard className="bg-gradient-to-br from-red-500/10 to-cyan-500/10 border-red-500/20">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle>Planner & Productivity</CardTitle>
                     <SavedBadge section="planner" />
@@ -694,7 +694,7 @@ export default function SettingsForm({ user }: { user: any }) {
             </SpotlightCard>
 
             {/* SECTION: Data Management */}
-            <SpotlightCard>
+            <SpotlightCard className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border-cyan-500/20">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle>Data Management</CardTitle>
                     <SavedBadge section="data" />
@@ -712,7 +712,7 @@ export default function SettingsForm({ user }: { user: any }) {
             </SpotlightCard>
 
             {/* SECTION 10: Help & About */}
-            <SpotlightCard>
+            <SpotlightCard className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border-emerald-500/20">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle>Help & About</CardTitle>
                 </CardHeader>

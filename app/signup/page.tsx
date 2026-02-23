@@ -75,7 +75,7 @@ export default function SignupPage() {
                         <div className="h-8 w-8 bg-white text-black flex items-center justify-center rounded-md">
                             <Command size={16} strokeWidth={3} />
                         </div>
-                        <span className="font-syne font-bold text-xl tracking-tight">V_Nexus</span>
+                        <span className="font-syne font-bold text-xl tracking-tight">V</span>
                     </motion.div>
 
                     <motion.div
@@ -93,7 +93,7 @@ export default function SignupPage() {
                     </motion.div>
 
                     <div className="text-zinc-700 text-xs uppercase tracking-widest font-mono">
-                        © 2026 V_Nexus Inc.
+                        © 2026 V Inc.
                     </div>
                 </div>
 
@@ -105,7 +105,7 @@ export default function SignupPage() {
                         <div className="h-8 w-8 bg-white text-black flex items-center justify-center rounded-md">
                             <Command size={16} strokeWidth={3} />
                         </div>
-                        <span className="font-syne font-bold text-xl tracking-tight">V_Nexus</span>
+                        <span className="font-syne font-bold text-xl tracking-tight">V</span>
                     </div>
 
                     <motion.div

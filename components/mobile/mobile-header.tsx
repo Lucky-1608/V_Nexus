@@ -13,7 +13,7 @@ export function MobileHeader() {
     return (
         <div className="md:hidden flex items-center justify-between p-4 sticky top-0 z-50">
             <Link href="/dashboard" className="font-syne font-bold text-xl tracking-tight text-foreground/90 backdrop-blur-md bg-background/30 rounded-full px-4 py-1.5 border border-white/5 shadow-sm">
-                V_Nexus
+                V
             </Link>
             <div className="backdrop-blur-md bg-background/30 rounded-full p-1 border border-white/5 shadow-sm">
                 <ThemeToggle />

@@ -72,7 +72,7 @@ export function CollectionCard({ collection }: CollectionCardProps) {
         <>
             <div className="relative group">
                 <Link href={`/dashboard/collections/${collection.id}`}>
-                    <SpotlightCard className="hover:bg-muted/50 transition-colors cursor-pointer h-full">
+                    <SpotlightCard className="hover:bg-muted/50 transition-colors cursor-pointer h-full bg-gradient-to-br from-indigo-500/10 to-cyan-500/10 border-indigo-500/20">
                         <CardHeader>
                             <div className="flex items-start gap-2 pr-8 w-full min-w-0">
                                 <Folder className="h-5 w-5 text-blue-500 shrink-0 mt-1" />

@@ -17,7 +17,7 @@ export function NoteCard({ note, onClick }: NoteCardProps) {
     return (
         <HoverEffect variant="lift">
             <SpotlightCard
-                className="cursor-pointer hover:bg-accent/50 transition-colors h-full"
+                className="cursor-pointer hover:bg-accent/50 transition-colors h-full bg-gradient-to-br from-orange-500/10 to-cyan-500/10 border-orange-500/20"
                 onClick={onClick}
             >
                 <CardHeader>

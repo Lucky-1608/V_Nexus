@@ -38,12 +38,12 @@ export function MobileNav({ isAdmin }: { isAdmin?: boolean }) {
                                 <div className="relative h-8 w-8 rounded-sm overflow-hidden">
                                     <Image
                                         src="/logo.svg"
-                                        alt="V_Nexus Logo"
+                                        alt="V Logo"
                                         fill
                                         className="object-cover"
                                     />
                                 </div>
-                                V_Nexus
+                                V
                             </SheetTitle>
                             <div className="space-y-1">
                                 {sidebarNavItems.map((item) => {

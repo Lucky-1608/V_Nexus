@@ -86,7 +86,7 @@ function CategoryCard({ category }: { category: any }) {
         <StaggerItem className="h-full">
             <HoverEffect variant="lift">
                 <Link href={`/dashboard/categories/${category.id}`}>
-                    <SpotlightCard className="hover:bg-accent/50 transition-colors cursor-pointer h-full">
+                    <SpotlightCard className="hover:bg-accent/50 transition-colors cursor-pointer h-full bg-gradient-to-br from-indigo-500/10 to-cyan-500/10 border-indigo-500/20">
                         <CardHeader>
                             <CardTitle className="flex items-center justify-between gap-2">
                                 <div className="flex items-center gap-2">

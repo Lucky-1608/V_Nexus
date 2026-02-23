@@ -38,7 +38,7 @@ export default function LoginPage(props: { searchParams: Promise<{ message: stri
                         <div className="h-8 w-8 bg-white text-black flex items-center justify-center rounded-md">
                             <Command size={16} strokeWidth={3} />
                         </div>
-                        <span className="font-syne font-bold text-xl tracking-tight">V_Nexus</span>
+                        <span className="font-syne font-bold text-xl tracking-tight">V</span>
                     </motion.div>
 
                     <motion.div
@@ -56,7 +56,7 @@ export default function LoginPage(props: { searchParams: Promise<{ message: stri
                     </motion.div>
 
                     <div className="text-zinc-700 text-xs uppercase tracking-widest font-mono">
-                        © 2026 V_Nexus Inc.
+                        © 2026 V Inc.
                     </div>
                 </div>
 
@@ -68,7 +68,7 @@ export default function LoginPage(props: { searchParams: Promise<{ message: stri
                         <div className="h-8 w-8 bg-white text-black flex items-center justify-center rounded-md">
                             <Command size={16} strokeWidth={3} />
                         </div>
-                        <span className="font-syne font-bold text-xl tracking-tight">V_Nexus</span>
+                        <span className="font-syne font-bold text-xl tracking-tight">V</span>
                     </div>
 
                     <motion.div
@@ -131,7 +131,7 @@ export default function LoginPage(props: { searchParams: Promise<{ message: stri
                                     formAction={login}
                                     className="w-full bg-white text-black hover:bg-zinc-200 h-12 rounded-full font-medium transition-transform active:scale-[0.98] flex items-center justify-center gap-2 group"
                                 >
-                                    <span>Enter Nexus</span>
+                                    <span>Enter V</span>
                                     <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                                 </SubmitButton>
                             </div>
