@@ -14,8 +14,8 @@ export async function FinanceStats({ userId }: { userId: string }) {
         .select('amount, type')
         .eq('user_id', userId)
 
-    const income = transactions?.filter(t => t.type === 'Income').reduce((acc, t) => acc + t.amount, 0) || 0
-    const expense = transactions?.filter(t => t.type === 'Expense').reduce((acc, t) => acc + t.amount, 0) || 0
+    const income = transactions?.filter(t => t.type === 'Income').reduce((acc, t) => acc + Number(t.amount), 0) || 0
+    const expense = transactions?.filter(t => t.type === 'Expense').reduce((acc, t) => acc + Number(t.amount), 0) || 0
     const balance = income - expense
 
     return (

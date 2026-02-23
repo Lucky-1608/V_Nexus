@@ -19,11 +19,11 @@ interface Transaction {
 export function FinanceOverview({ transactions }: { transactions: Transaction[] }) {
     const totalIncome = transactions
         .filter(t => t.type === 'Income')
-        .reduce((acc, t) => acc + t.amount, 0)
+        .reduce((acc, t) => acc + Number(t.amount), 0)
 
     const totalExpenses = transactions
         .filter(t => t.type === 'Expense')
-        .reduce((acc, t) => acc + t.amount, 0)
+        .reduce((acc, t) => acc + Number(t.amount), 0)
 
     const balance = totalIncome - totalExpenses
 
@@ -31,7 +31,7 @@ export function FinanceOverview({ transactions }: { transactions: Transaction[] 
     const expenseCategories = transactions
         .filter(t => t.type === 'Expense')
         .reduce((acc, t) => {
-            acc[t.category_name] = (acc[t.category_name] || 0) + t.amount
+            acc[t.category_name] = (acc[t.category_name] || 0) + Number(t.amount)
             return acc
         }, {} as Record<string, number>)
 
@@ -44,7 +44,7 @@ export function FinanceOverview({ transactions }: { transactions: Transaction[] 
     const incomeCategories = transactions
         .filter(t => t.type === 'Income')
         .reduce((acc, t) => {
-            acc[t.category_name] = (acc[t.category_name] || 0) + t.amount
+            acc[t.category_name] = (acc[t.category_name] || 0) + Number(t.amount)
             return acc
         }, {} as Record<string, number>)
 

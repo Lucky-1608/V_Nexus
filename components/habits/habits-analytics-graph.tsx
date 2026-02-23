@@ -62,7 +62,7 @@ export function HabitsAnalyticsGraph() {
     ]
 
     return (
-        <SpotlightCard>
+        <SpotlightCard className="bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-cyan-500/10 border border-indigo-500/20 backdrop-blur-md">
             <CardHeader>
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
