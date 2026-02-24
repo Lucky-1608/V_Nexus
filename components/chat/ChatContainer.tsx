@@ -138,7 +138,7 @@ export function ChatContainer({ initialMessages, teamId, projectId, currentUser,
                     // filter: `team_id=eq.${teamId}` // Temporarily removing filter to debug
                 },
                 async (payload) => {
-                    console.log('Realtime Payload:', payload)
+                    // Client-side filtering since we removed server-side filter for debugging
                     // Client-side filtering since we removed server-side filter for debugging
                     const newMessage = payload.new as any
                     if (newMessage && newMessage.team_id && newMessage.team_id !== teamId) return

@@ -39,7 +39,7 @@ export default async function TeamsPage() {
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">Teams</h2>
+                    <h2 className="text-3xl font-bold tracking-tight">Teams Dashboard</h2>
                     <p className="text-muted-foreground">Manage your teams and collaborations.</p>
                 </div>
                 <CreateTeamDialog />

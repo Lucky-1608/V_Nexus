@@ -79,7 +79,7 @@ export function QuickActionsMenu({ open, onClose }: QuickActionsMenuProps) {
 
                         <div className="grid grid-cols-2 gap-4">
                             {actions.map((action, i) => (
-                                <Link key={action.label} href={action.href} onClick={onClose}>
+                                <Link key={action.label} href={action.href} onClick={onClose} prefetch={false}>
                                     <motion.div
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}

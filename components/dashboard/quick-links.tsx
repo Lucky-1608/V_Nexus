@@ -15,7 +15,7 @@ export async function QuickLinks({ userId }: { userId: string }) {
             <h3 className="text-xl font-bold tracking-tight">Quick Access</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 <HoverEffect variant="glow" className="col-span-2 md:col-span-2 lg:col-span-2 relative group overflow-hidden rounded-xl">
-                    <Link href="/dashboard/paths" className="block h-full w-full">
+                    <Link href="/dashboard/paths" prefetch={false} className="block h-full w-full">
                         <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 to-cyan-700 opacity-90 group-hover:opacity-100 transition-opacity" />
                         <div className="relative z-10 p-6 h-full flex flex-col justify-between text-white">
                             <Route className="h-8 w-8 text-white/80" />
@@ -28,49 +28,49 @@ export async function QuickLinks({ userId }: { userId: string }) {
                 </HoverEffect>
 
                 <HoverEffect variant="glow" className="col-span-1">
-                    <Link href="/dashboard/collections" className="flex flex-col items-center justify-center h-32 bg-card/50 backdrop-blur-sm border rounded-xl hover:bg-card/80 transition-colors p-4 text-center">
+                    <Link href="/dashboard/collections" prefetch={false} className="flex flex-col items-center justify-center h-32 bg-card/50 backdrop-blur-sm border rounded-xl hover:bg-card/80 transition-colors p-4 text-center">
                         <BookOpen className="h-6 w-6 mb-2 text-primary" />
                         <span className="text-sm font-medium">Collections</span>
                     </Link>
                 </HoverEffect>
 
                 <HoverEffect variant="glow" className="col-span-1">
-                    <Link href="/dashboard/categories" className="flex flex-col items-center justify-center h-32 bg-card/50 backdrop-blur-sm border rounded-xl hover:bg-card/80 transition-colors p-4 text-center">
+                    <Link href="/dashboard/categories" prefetch={false} className="flex flex-col items-center justify-center h-32 bg-card/50 backdrop-blur-sm border rounded-xl hover:bg-card/80 transition-colors p-4 text-center">
                         <Layers className="h-6 w-6 mb-2 text-primary" />
                         <span className="text-sm font-medium">Categories</span>
                     </Link>
                 </HoverEffect>
 
                 <HoverEffect variant="glow" className="col-span-1">
-                    <Link href="/dashboard/roadmaps" className="flex flex-col items-center justify-center h-32 bg-card/50 backdrop-blur-sm border rounded-xl hover:bg-card/80 transition-colors p-4 text-center">
+                    <Link href="/dashboard/roadmaps" prefetch={false} className="flex flex-col items-center justify-center h-32 bg-card/50 backdrop-blur-sm border rounded-xl hover:bg-card/80 transition-colors p-4 text-center">
                         <MapIcon className="h-6 w-6 mb-2 text-primary" />
                         <span className="text-sm font-medium">Roadmaps</span>
                     </Link>
                 </HoverEffect>
 
                 <HoverEffect variant="glow" className="col-span-1">
-                    <Link href="/dashboard/teams" className="flex flex-col items-center justify-center h-32 bg-card/50 backdrop-blur-sm border rounded-xl hover:bg-card/80 transition-colors p-4 text-center">
+                    <Link href="/dashboard/teams" prefetch={false} className="flex flex-col items-center justify-center h-32 bg-card/50 backdrop-blur-sm border rounded-xl hover:bg-card/80 transition-colors p-4 text-center">
                         <Users className="h-6 w-6 mb-2 text-primary" />
                         <span className="text-sm font-medium">Teams</span>
                     </Link>
                 </HoverEffect>
 
                 <HoverEffect variant="glow" className="col-span-1">
-                    <Link href="/dashboard/chat" className="flex flex-col items-center justify-center h-32 bg-card/50 backdrop-blur-sm border rounded-xl hover:bg-card/80 transition-colors p-4 text-center">
+                    <Link href="/dashboard/chat" prefetch={false} className="flex flex-col items-center justify-center h-32 bg-card/50 backdrop-blur-sm border rounded-xl hover:bg-card/80 transition-colors p-4 text-center">
                         <MessageSquare className="h-6 w-6 mb-2 text-primary" />
                         <span className="text-sm font-medium">Chat</span>
                     </Link>
                 </HoverEffect>
 
                 <HoverEffect variant="glow" className="col-span-1">
-                    <Link href="/dashboard/analytics" className="flex flex-col items-center justify-center h-32 bg-card/50 backdrop-blur-sm border rounded-xl hover:bg-card/80 transition-colors p-4 text-center">
+                    <Link href="/dashboard/analytics" prefetch={false} className="flex flex-col items-center justify-center h-32 bg-card/50 backdrop-blur-sm border rounded-xl hover:bg-card/80 transition-colors p-4 text-center">
                         <BarChart3 className="h-6 w-6 mb-2 text-primary" />
                         <span className="text-sm font-medium">Analytics</span>
                     </Link>
                 </HoverEffect>
 
                 <HoverEffect variant="glow" className="col-span-1">
-                    <Link href="/dashboard/settings" className="flex flex-col items-center justify-center h-32 bg-card/50 backdrop-blur-sm border rounded-xl hover:bg-card/80 transition-colors p-4 text-center">
+                    <Link href="/dashboard/settings" prefetch={false} className="flex flex-col items-center justify-center h-32 bg-card/50 backdrop-blur-sm border rounded-xl hover:bg-card/80 transition-colors p-4 text-center">
                         <Settings className="h-6 w-6 mb-2 text-primary" />
                         <span className="text-sm font-medium">Settings</span>
                     </Link>

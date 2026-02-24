@@ -92,6 +92,7 @@ export function ChatSidebar({ teams, onSelect }: ChatSidebarProps) {
                         >
                             <div className="flex items-center group">
                                 <Link
+                                    prefetch={false}
                                     href={`/dashboard/chat/${team.id}`}
                                     onClick={onSelect}
                                     className={cn(
@@ -129,6 +130,7 @@ export function ChatSidebar({ teams, onSelect }: ChatSidebarProps) {
                             <CollapsibleContent className="pl-4 pt-1 space-y-1">
                                 {team.projects?.map((project) => (
                                     <Link
+                                        prefetch={false}
                                         key={project.id}
                                         href={`/dashboard/chat/${team.id}/project/${project.id}`}
                                         onClick={onSelect}

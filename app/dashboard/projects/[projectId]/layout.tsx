@@ -32,7 +32,7 @@ export default async function ProjectLayout(props: {
         <div className="flex flex-col h-full space-y-6">
             <div className="flex items-center gap-4 border-b pb-4">
                 <Button variant="ghost" size="icon" asChild>
-                    <Link href="/dashboard/teams">
+                    <Link href="/dashboard/teams" prefetch={false}>
                         <ArrowLeft className="h-4 w-4" />
                     </Link>
                 </Button>
@@ -44,19 +44,19 @@ export default async function ProjectLayout(props: {
 
             <div className="flex gap-2">
                 <Button variant="outline" size="sm" asChild>
-                    <Link href={`/dashboard/projects/${params.projectId}/resources`}>
+                    <Link href={`/dashboard/projects/${params.projectId}/resources`} prefetch={false}>
                         <Book className="mr-2 h-4 w-4" />
                         Resources
                     </Link>
                 </Button>
                 <Button variant="outline" size="sm" asChild>
-                    <Link href={`/dashboard/projects/${params.projectId}/notes`}>
+                    <Link href={`/dashboard/projects/${params.projectId}/notes`} prefetch={false}>
                         <FileText className="mr-2 h-4 w-4" />
                         Notes
                     </Link>
                 </Button>
                 <Button variant="outline" size="sm" asChild>
-                    <Link href={`/dashboard/projects/${params.projectId}/paths`}>
+                    <Link href={`/dashboard/projects/${params.projectId}/paths`} prefetch={false}>
                         <GraduationCap className="mr-2 h-4 w-4" />
                         Learning Paths
                     </Link>

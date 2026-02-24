@@ -46,7 +46,7 @@ export function ThemeSync({ userTheme, userId }: { userTheme?: string, userId?: 
                     const newTheme = newSettings?.theme
 
                     if (newTheme && newTheme !== themeRef.current) {
-                        console.log('Syncing theme from remote:', newTheme)
+
                         setTheme(newTheme)
                     }
                 }

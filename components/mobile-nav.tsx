@@ -73,7 +73,7 @@ export function MobileNav({ isAdmin }: { isAdmin?: boolean }) {
                                                                 asChild
                                                                 onClick={() => setOpen(false)}
                                                             >
-                                                                <Link href={child.href}>
+                                                                <Link href={child.href} prefetch={false}>
                                                                     <child.icon className="mr-2 h-3.5 w-3.5" />
                                                                     {child.title}
                                                                 </Link>
@@ -93,7 +93,7 @@ export function MobileNav({ isAdmin }: { isAdmin?: boolean }) {
                                             asChild
                                             onClick={() => setOpen(false)}
                                         >
-                                            <Link href={item.href}>
+                                            <Link href={item.href} prefetch={false}>
                                                 <item.icon className="mr-2 h-4 w-4" />
                                                 {item.title}
                                             </Link>
@@ -108,7 +108,7 @@ export function MobileNav({ isAdmin }: { isAdmin?: boolean }) {
                                     asChild
                                     onClick={() => setOpen(false)}
                                 >
-                                    <Link href="/dashboard/admin">
+                                    <Link href="/dashboard/admin" prefetch={false}>
                                         <Shield className="mr-2 h-4 w-4" />
                                         Admin
                                     </Link>

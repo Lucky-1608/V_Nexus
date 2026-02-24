@@ -37,7 +37,7 @@ export default async function RoadmapsPage({
             <RoadmapsAutoCreate />
             <div className="flex justify-between items-center mb-8">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">My Roadmaps</h1>
+                    <h1 className="text-3xl font-bold tracking-tight">Roadmaps</h1>
                     <p className="text-muted-foreground mt-1">Manage your learning paths and project plans.</p>
                 </div>
                 <form action={async () => {

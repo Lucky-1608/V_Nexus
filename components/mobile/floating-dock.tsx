@@ -89,7 +89,7 @@ export function FloatingDock({ user, isAdmin }: FloatingDockProps) {
 
 function DockItem({ href, icon, active }: { href: string; icon: React.ReactNode; active: boolean }) {
     return (
-        <Link href={href}>
+        <Link href={href} prefetch={false}>
             <div className={cn(
                 "flex flex-col items-center justify-center w-12 h-12 rounded-xl transition-all duration-300",
                 active ? "text-primary bg-primary/10" : "text-white/60 hover:text-white hover:bg-white/10"

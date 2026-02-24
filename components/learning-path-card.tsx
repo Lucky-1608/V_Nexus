@@ -65,7 +65,7 @@ export function LearningPathCard({ path }: { path: LearningPathProps }) {
                                         {path.is_completed ? <><CheckCircle2 className="mr-2 h-4 w-4" /> Mark as Incomplete</> : <><CheckCircle className="mr-2 h-4 w-4" /> Mark as Completed</>}
                                     </DropdownMenuItem>
                                     <DropdownMenuItem asChild>
-                                        <Link href={`/dashboard/paths/${path.id}/edit`} className="w-full cursor-pointer">
+                                        <Link href={`/dashboard/paths/${path.id}/edit`} prefetch={false} className="w-full cursor-pointer">
                                             <Pencil className="mr-2 h-4 w-4" />
                                             Edit
                                         </Link>

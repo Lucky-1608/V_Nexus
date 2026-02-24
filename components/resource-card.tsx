@@ -90,7 +90,7 @@ export function ResourceCard({ resource }: { resource: ResourceProps }) {
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end" className="glass-dark border-white/10">
                                     <DropdownMenuItem asChild>
-                                        <Link href={`/dashboard/resources/${resource.id}/edit`} className="w-full cursor-pointer">
+                                        <Link href={`/dashboard/resources/${resource.id}/edit`} prefetch={false} className="w-full cursor-pointer">
                                             Edit
                                         </Link>
                                     </DropdownMenuItem>
@@ -123,7 +123,7 @@ export function ResourceCard({ resource }: { resource: ResourceProps }) {
                                     <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-all -translate-y-1 group-hover:translate-y-0" />
                                 </a>
                             ) : (
-                                <Link href={`/dashboard/resources/${resource.id}`} className="hover:text-primary transition-colors">
+                                <Link href={`/dashboard/resources/${resource.id}`} prefetch={false} className="hover:text-primary transition-colors">
                                     {resource.title}
                                 </Link>
                             )}

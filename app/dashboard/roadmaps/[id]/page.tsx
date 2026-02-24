@@ -36,7 +36,7 @@ export default async function RoadmapPage({ params, searchParams }: { params: Pr
 
             if (originalTime > copyTime) {
                 try {
-                    console.log('Syncing shared roadmap...')
+
                     await syncRoadmap(existingCopy.id, roadmap.id)
                     redirectToId = existingCopy.id
                 } catch (e) {
@@ -49,7 +49,7 @@ export default async function RoadmapPage({ params, searchParams }: { params: Pr
         } else {
             // Not copied yet.
             try {
-                console.log('Auto-copying shared roadmap...')
+
                 const newRoadmap = await copyRoadmapFromShare(roadmap.id)
                 redirectToId = newRoadmap.id
             } catch (e) {
@@ -83,14 +83,14 @@ export default async function RoadmapPage({ params, searchParams }: { params: Pr
             .in('step_id', stepIds)
 
         if (links && links.length > 0) {
-            console.log('Found links:', links.length)
+
             // Collect IDs for details
             const noteIds = links.filter((l: any) => l.note_id).map((l: any) => l.note_id)
             const pathIds = links.filter((l: any) => l.learning_path_id).map((l: any) => l.learning_path_id)
             const resourceIds = links.filter((l: any) => l.resource_id).map((l: any) => l.resource_id)
             const goalIds = links.filter((l: any) => l.goal_id).map((l: any) => l.goal_id)
 
-            console.log('IDs to fetch:', { noteIds, pathIds, resourceIds, goalIds })
+
 
             // Fetch details in parallel
             const [notesRes, pathsRes, resourcesRes, goalsRes] = await Promise.all([
@@ -134,9 +134,9 @@ export default async function RoadmapPage({ params, searchParams }: { params: Pr
                     step.links = linksByStepId.get(step.id)
                 }
             })
-            console.log('Steps with links:', steps.filter((s: any) => s.links && s.links.length > 0).length)
+
         } else {
-            console.log('No links found in roadmap_step_links query')
+
         }
     }
 

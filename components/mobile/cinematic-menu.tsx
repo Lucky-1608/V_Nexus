@@ -79,7 +79,7 @@ export function CinematicMenu({ open, onClose, user, isAdmin }: CinematicMenuPro
                                     pathname === '/dashboard/admin' ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
                                 )}
                             >
-                                <Link href="/dashboard/admin" onClick={onClose}>
+                                <Link href="/dashboard/admin" onClick={onClose} prefetch={false}>
                                     <Shield className="mr-3 h-5 w-5" />
                                     Admin Dashboard
                                 </Link>
@@ -142,7 +142,7 @@ function MenuItem({ item, pathname, onClose }: { item: any; pathname: string; on
                                 pathname === child.href ? "text-primary bg-primary/10" : "text-muted-foreground/80 hover:text-foreground hover:bg-white/5"
                             )}
                         >
-                            <Link href={child.href} onClick={onClose}>
+                            <Link href={child.href} onClick={onClose} prefetch={false}>
                                 <child.icon className="mr-3 h-4 w-4" />
                                 {child.title}
                             </Link>
@@ -162,7 +162,7 @@ function MenuItem({ item, pathname, onClose }: { item: any; pathname: string; on
                 isActive ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground hover:bg-white/5"
             )}
         >
-            <Link href={item.href} onClick={onClose}>
+            <Link href={item.href} onClick={onClose} prefetch={false}>
                 <item.icon className={cn("mr-3 h-5 w-5", isActive ? "text-primary" : "text-muted-foreground/70")} />
                 {item.title}
             </Link>

@@ -36,7 +36,7 @@ export async function HabitStats({ userId }: { userId: string }) {
 
     return (
         <HoverEffect variant="lift" className="h-full">
-            <Link href="/dashboard/habits" className="block h-full">
+            <Link href="/dashboard/habits" prefetch={false} className="block h-full">
                 <SpotlightCard className="h-full bg-gradient-to-br from-indigo-500/10 to-cyan-500/10 border-indigo-500/20">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-base font-semibold">Daily Habits</CardTitle>

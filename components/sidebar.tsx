@@ -60,7 +60,7 @@ export function Sidebar({ className, isAdmin }: SidebarProps) {
         )}>
             <ScrollArea className="flex-1 pr-1">
                 <div className="px-3 py-2">
-                    <Link href="/dashboard" className="block mb-6 px-4 hover:opacity-80 transition-opacity">
+                    <Link href="/dashboard" prefetch={false} className="block mb-6 px-4 hover:opacity-80 transition-opacity">
                         <h2 className="text-xl font-bold tracking-tighter text-primary flex items-center gap-3">
                             <div className="relative h-9 w-9 rounded-lg overflow-hidden shadow-sm">
                                 <Image
@@ -108,7 +108,7 @@ export function Sidebar({ className, isAdmin }: SidebarProps) {
                                                             )}
                                                             asChild
                                                         >
-                                                            <Link href={child.href}>
+                                                            <Link href={child.href} prefetch={false}>
                                                                 <child.icon className="mr-2 h-3.5 w-3.5" />
                                                                 {child.title}
                                                             </Link>
@@ -130,7 +130,7 @@ export function Sidebar({ className, isAdmin }: SidebarProps) {
                                         )}
                                         asChild
                                     >
-                                        <Link href={item.href}>
+                                        <Link href={item.href} prefetch={false}>
                                             <item.icon className="mr-2 h-4 w-4" />
                                             {item.title}
                                         </Link>
@@ -144,7 +144,7 @@ export function Sidebar({ className, isAdmin }: SidebarProps) {
                                 className="w-full justify-start"
                                 asChild
                             >
-                                <Link href="/dashboard/admin">
+                                <Link href="/dashboard/admin" prefetch={false}>
                                     <Shield className="mr-2 h-4 w-4" />
                                     Admin
                                 </Link>

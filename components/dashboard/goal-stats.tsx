@@ -22,7 +22,7 @@ export async function GoalStats({ userId }: { userId: string }) {
 
     return (
         <HoverEffect variant="lift">
-            <Link href="/dashboard/goals" className="block h-full">
+            <Link href="/dashboard/goals" prefetch={false} className="block h-full">
                 <SpotlightCard className="h-full bg-gradient-to-br from-violet-500/10 to-cyan-500/10 border-violet-500/20">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Goal Progress</CardTitle>
