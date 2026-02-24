@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   experimental: {
   },
   images: {
+    qualities: [25, 50, 75, 80, 100],
     remotePatterns: [
       {
         protocol: 'https',
