@@ -1,6 +1,6 @@
 'use client'
 
-import { Book, FileText, TrendingUp, GraduationCap, ArrowRight, Check } from 'lucide-react'
+import { Book, FileText, TrendingUp, GraduationCap, ArrowRight, Check, File as FileIcon, Image as ImageIcon, Download } from 'lucide-react'
 import Link from 'next/link'
 import { copyItemToAccount } from '@/app/dashboard/chat/shared-actions'
 import { toast } from 'sonner'
@@ -36,11 +36,21 @@ export function SharedContentCard({ attachment }: { attachment: { type: string, 
             icon = <TrendingUp className="h-4 w-4" /> // Or a Map-like icon
             color = "bg-indigo-500/10 text-indigo-500"
             break
+        case 'local_file':
+            icon = item.contentType?.startsWith('image/') ? <ImageIcon className="h-4 w-4" /> : <FileIcon className="h-4 w-4" />
+            color = "bg-primary/10 text-primary"
+            break
     }
 
     const handleClick = async (e: React.MouseEvent) => {
         e.preventDefault()
         e.stopPropagation()
+
+        // Handle local files
+        if (type === 'local_file') {
+            window.open(item.url, '_blank')
+            return
+        }
 
         // Direct navigation for Roadmap (Page handles logic)
         if (type === 'roadmap') {
@@ -90,6 +100,23 @@ export function SharedContentCard({ attachment }: { attachment: { type: string, 
         }
     }
 
+    // Image Preview layout
+    if (type === 'local_file' && item.contentType?.startsWith('image/')) {
+        return (
+            <div
+                onClick={handleClick}
+                className="relative overflow-hidden rounded-xl border border-border group/card cursor-pointer max-w-sm hover:ring-2 hover:ring-primary/50 transition-all"
+            >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={item.url} alt={item.name} className="w-full aspect-video sm:aspect-auto h-auto object-cover max-h-64 bg-muted" />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-3 pt-10 opacity-0 group-hover/card:opacity-100 transition-opacity flex items-center justify-between">
+                    <span className="text-white text-xs truncate mr-2">{item.name}</span>
+                    <Download className="h-4 w-4 text-white shrink-0" />
+                </div>
+            </div>
+        )
+    }
+
     return (
         <div
             onClick={handleClick}
@@ -99,13 +126,19 @@ export function SharedContentCard({ attachment }: { attachment: { type: string, 
                 {icon}
             </div>
             <div className="flex-1 min-w-0">
-                <div className="text-xs font-medium text-muted-foreground capitalize mb-0.5">{type.replace('_', ' ')}</div>
+                <div className="text-xs font-medium text-muted-foreground capitalize mb-0.5">
+                    {type === 'local_file' ? 'File Attachment' : type.replace('_', ' ')}
+                </div>
                 <div className="text-sm font-medium truncate">{item.title || item.name}</div>
             </div>
             {isLoading ? (
                 <div className="h-4 w-4 rounded-full border-2 border-primary border-t-transparent animate-spin" />
             ) : (
-                <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover/card:opacity-100 transition-opacity" />
+                type === 'local_file' ? (
+                    <Download className="h-4 w-4 text-muted-foreground opacity-0 group-hover/card:opacity-100 transition-opacity shrink-0" />
+                ) : (
+                    <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover/card:opacity-100 transition-opacity shrink-0" />
+                )
             )}
         </div>
     )

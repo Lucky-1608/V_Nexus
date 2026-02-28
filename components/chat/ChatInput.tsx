@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
+import { createClient } from '@/lib/supabase/client'
 import { AttachmentPicker } from './AttachmentPicker'
 import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react'
 import { format } from 'date-fns'
@@ -63,6 +64,47 @@ export function ChatInput({ teamId, projectId, members = [], onSendMessage, onTy
                 setPriority('Medium')
                 setDueDate(undefined)
             } else {
+                // Upload local files first
+                const supabase = createClient()
+                const uploadedFiles: any[] = []
+                const standardAttachments: any[] = []
+                const uploadPromises = attachments.map(async (att) => {
+                    if (att.type === 'local_file') {
+                        const file = att.item as File
+                        const fileExt = file.name.split('.').pop()
+                        const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`
+                        const filePath = `${teamId}/${fileName}`
+
+                        const { data, error } = await supabase.storage
+                            .from('chat_attachments')
+                            .upload(filePath, file)
+
+                        if (error) throw new Error(`Failed to upload ${file.name}: ${error.message}`)
+
+                        const { data: { publicUrl } } = supabase.storage
+                            .from('chat_attachments')
+                            .getPublicUrl(filePath)
+
+                        uploadedFiles.push({
+                            type: 'local_file',
+                            item: {
+                                name: file.name,
+                                url: publicUrl,
+                                size: file.size,
+                                contentType: file.type
+                            }
+                        })
+                    } else {
+                        standardAttachments.push(att)
+                    }
+                })
+
+                if (attachments.some(a => a.type === 'local_file')) {
+                    toast.loading('Uploading files...', { id: 'upload-toast' })
+                    await Promise.all(uploadPromises)
+                    toast.dismiss('upload-toast')
+                }
+
                 // Send Message
                 const formData = new FormData()
                 formData.append('message', message)
@@ -70,7 +112,8 @@ export function ChatInput({ teamId, projectId, members = [], onSendMessage, onTy
                 if (projectId) formData.append('projectId', projectId)
 
                 const meta: any = {}
-                if (attachments.length > 0) meta.attachments = attachments
+                const finalAttachments = [...standardAttachments, ...uploadedFiles]
+                if (finalAttachments.length > 0) meta.attachments = finalAttachments
                 if (mentionedUserIds.size > 0) meta.mentions = Array.from(mentionedUserIds)
 
                 if (Object.keys(meta).length > 0) {
@@ -92,9 +135,10 @@ export function ChatInput({ teamId, projectId, members = [], onSendMessage, onTy
             if (textareaRef.current) {
                 textareaRef.current.style.height = 'auto'
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Failed to send:', error)
-            toast.error(isTaskMode ? 'Failed to create task' : 'Failed to send message')
+            toast.dismiss('upload-toast')
+            toast.error(error.message || (isTaskMode ? 'Failed to create task' : 'Failed to send message'))
         } finally {
             setIsSending(false)
             // Focus back
@@ -194,10 +238,18 @@ export function ChatInput({ teamId, projectId, members = [], onSendMessage, onTy
 
     const [attachments, setAttachments] = useState<{ type: string, item: any }[]>([])
 
-    const addAttachment = (type: string, item: any) => {
-        // Prevent duplicates
-        if (attachments.some(a => a.item.id === item.id && a.type === type)) return
-        setAttachments([...attachments, { type, item }])
+    const addAttachment = (type: string, item: any | any[]) => {
+        if (Array.isArray(item)) {
+            // Handle multiple files
+            const newAttachments = item
+                .filter(file => !attachments.some(a => a.item.name === file.name && a.type === type))
+                .map(file => ({ type, item: file }))
+            setAttachments([...attachments, ...newAttachments])
+        } else {
+            // Prevent duplicates
+            if (attachments.some(a => a.item.id === item.id && a.type === type)) return
+            setAttachments([...attachments, { type, item }])
+        }
     }
 
     const removeAttachment = (index: number) => {

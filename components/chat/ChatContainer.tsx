@@ -127,6 +127,7 @@ export function ChatContainer({ initialMessages, teamId, projectId, currentUser,
     }, [currentUser, members, totalMembers])
 
     useEffect(() => {
+        let isUnmounted = false
         const channel = supabase
             .channel(`chat:${teamId}:${projectId || 'team'}`)
             .on(
@@ -249,12 +250,15 @@ export function ChatContainer({ initialMessages, teamId, projectId, currentUser,
             .subscribe((status) => {
                 if (status === 'SUBSCRIBED') setStatus('connected')
                 if (status === 'CLOSED' || status === 'CHANNEL_ERROR') {
-                    console.error('Realtime subscription error:', status)
-                    setStatus('disconnected')
+                    if (status === 'CHANNEL_ERROR' && !isUnmounted) {
+                        console.error('Realtime subscription error:', status)
+                    }
+                    if (!isUnmounted) setStatus('disconnected')
                 }
             })
 
         return () => {
+            isUnmounted = true
             supabase.removeChannel(channel)
         }
     }, [teamId, projectId, supabase])

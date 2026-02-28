@@ -31,7 +31,7 @@ export function MessageList({ messages, teamId, projectId, onDelete, onUpdate, m
     // 2. New message from me: Scroll to bottom
     // 3. New message from others: Scroll to bottom IF already at bottom, otherwise show indicator (TODO)
 
-    const [shouldAutoScroll, setShouldAutoScroll] = useState(true)
+    const shouldAutoScroll = useRef(true)
 
     // Handle scroll events to determine if we should auto-scroll
     const handleScroll = () => {
@@ -39,7 +39,7 @@ export function MessageList({ messages, teamId, projectId, onDelete, onUpdate, m
         const { scrollTop, scrollHeight, clientHeight } = scrollRef.current
         // If within 100px of bottom, auto-scroll is enabled
         const isAtBottom = scrollHeight - scrollTop - clientHeight < 100
-        setShouldAutoScroll(isAtBottom)
+        shouldAutoScroll.current = isAtBottom
     }
 
     // Scroll to bottom on initial mount
@@ -56,7 +56,7 @@ export function MessageList({ messages, teamId, projectId, onDelete, onUpdate, m
         const lastMessage = messages[messages.length - 1]
         const isMyMessage = lastMessage?.is_sender
 
-        if (shouldAutoScroll || isMyMessage) {
+        if (shouldAutoScroll.current || isMyMessage) {
             // Use requestAnimationFrame to ensure DOM is ready
             requestAnimationFrame(() => {
                 if (scrollRef.current) {
@@ -64,7 +64,7 @@ export function MessageList({ messages, teamId, projectId, onDelete, onUpdate, m
                 }
             })
         }
-    }, [messages.length, shouldAutoScroll])
+    }, [messages.length])
 
     // Group messages
     const groupedMessages = messages.map((msg, index) => {
@@ -105,13 +105,12 @@ export function MessageList({ messages, teamId, projectId, onDelete, onUpdate, m
                             <motion.div
                                 key={msg.id + '-container'}
                                 // layout - Removed to fix scrolling issues
-                                initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
                                 transition={{
                                     type: "spring",
                                     stiffness: 260,
-                                    damping: 20,
-                                    delay: Math.min(index * 0.05, 0.5) // Stagger for initial load
+                                    damping: 20
                                 }}
                                 className="flex flex-col"
                             >

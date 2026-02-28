@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { Paperclip, Book, FileText, TrendingUp, GraduationCap, X, Map as MapIcon } from 'lucide-react'
+import { useRef, useState } from 'react'
+import { Paperclip, Book, FileText, TrendingUp, GraduationCap, X, Map as MapIcon, Upload } from 'lucide-react'
 import {
     Popover,
     PopoverContent,
@@ -12,10 +12,10 @@ import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { createClient } from '@/lib/supabase/client'
 
-type AttachmentType = 'resource' | 'note' | 'finance' | 'learning_path' | 'roadmap'
+type AttachmentType = 'resource' | 'note' | 'finance' | 'learning_path' | 'roadmap' | 'local_file'
 
 interface AttachmentPickerProps {
-    onSelect: (type: AttachmentType, item: any) => void
+    onSelect: (type: AttachmentType, item: any | any[]) => void
     projectId?: string
 }
 
@@ -24,6 +24,7 @@ export function AttachmentPicker({ onSelect, projectId }: AttachmentPickerProps)
     const [pickerType, setPickerType] = useState<AttachmentType | null>(null)
     const [items, setItems] = useState<any[]>([])
     const [loading, setLoading] = useState(false)
+    const fileInputRef = useRef<HTMLInputElement>(null)
 
     const handleTypeSelect = async (type: AttachmentType) => {
         if (type === 'finance') {
@@ -76,6 +77,15 @@ export function AttachmentPicker({ onSelect, projectId }: AttachmentPickerProps)
         setPickerType(null)
     }
 
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            onSelect('local_file', Array.from(e.target.files))
+            setOpen(false)
+            // Reset input so the same file can be selected again if removed
+            if (fileInputRef.current) fileInputRef.current.value = ''
+        }
+    }
+
     return (
         <>
             <Popover open={open} onOpenChange={setOpen}>
@@ -86,6 +96,11 @@ export function AttachmentPicker({ onSelect, projectId }: AttachmentPickerProps)
                 </PopoverTrigger>
                 <PopoverContent className="w-56 p-2" align="start">
                     <div className="grid grid-cols-1 gap-1">
+                        <Button variant="ghost" className="justify-start font-normal" onClick={() => fileInputRef.current?.click()}>
+                            <Upload className="mr-2 h-4 w-4" />
+                            Upload from Computer
+                        </Button>
+                        <div className="h-px bg-border my-1" />
                         <Button variant="ghost" className="justify-start font-normal" onClick={() => handleTypeSelect('resource')}>
                             <Book className="mr-2 h-4 w-4" />
                             Share Resource
@@ -109,6 +124,14 @@ export function AttachmentPicker({ onSelect, projectId }: AttachmentPickerProps)
                     </div>
                 </PopoverContent>
             </Popover>
+
+            <input
+                type="file"
+                multiple
+                ref={fileInputRef}
+                className="hidden"
+                onChange={handleFileChange}
+            />
 
             <Dialog open={!!pickerType} onOpenChange={(val) => !val && setPickerType(null)}>
                 <DialogContent className="sm:max-w-[425px] p-0 gap-0 overflow-hidden">
