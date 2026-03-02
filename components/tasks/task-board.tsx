@@ -108,12 +108,16 @@ export function TaskBoard({ tasks }: { tasks: Task[] }) {
 
                             <div className="flex flex-col gap-3">
                                 {colTasks.length === 0 && (
-                                    <div className="h-24 border rounded-lg border-dashed flex items-center justify-center text-muted-foreground text-sm">
+                                    <div className="h-24 border rounded-lg border-dashed flex items-center justify-center text-muted-foreground text-sm bg-card/20 backdrop-blur-sm border-border/50">
                                         Empty
                                     </div>
                                 )}
                                 {colTasks.map((task) => (
-                                    <SpotlightCard key={task.id} className="cursor-move hover:shadow-md transition-shadow">
+                                    <SpotlightCard
+                                        key={task.id}
+                                        className="cursor-move hover:shadow-xl transition-all duration-300 group/card border-0"
+                                        contentClassName="bg-card/40 backdrop-blur-xl border-border/50 saturate-150 p-0"
+                                    >
                                         <CardHeader className="p-4 pb-2 space-y-0 flex flex-row items-start justify-between">
                                             <Badge className={cn("text-[10px] px-1 py-0 h-5", priorityColor[task.priority as keyof typeof priorityColor])}>
                                                 {task.priority}

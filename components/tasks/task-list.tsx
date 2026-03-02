@@ -77,8 +77,11 @@ export function TaskList({ tasks }: { tasks: Task[] }) {
                 {tasks.map((task) => (
                     <StaggerItem key={task.id} className="w-full">
                         <HoverEffect variant="lift">
-                            <SpotlightCard className="transition-colors hover:border-primary/50">
-                                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <SpotlightCard
+                                className="transition-all duration-300 hover:shadow-xl hover:border-primary/40 group/card border-0"
+                                contentClassName="bg-card/40 backdrop-blur-xl border-border/50 saturate-150 p-4"
+                            >
+                                <CardHeader className="flex flex-row items-center justify-between space-y-0 p-0 pb-2">
                                     <div className="space-y-1">
                                         <CardTitle className={cn("text-sm font-medium", task.status === 'Done' && "line-through text-muted-foreground")}>
                                             {task.title}

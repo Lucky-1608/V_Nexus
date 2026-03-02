@@ -70,7 +70,7 @@ export function ChatSidebar({ teams, onSelect }: ChatSidebarProps) {
     }, [])
 
     return (
-        <div className="flex flex-col h-full border-r border-border bg-card/30 backdrop-blur-md">
+        <div className="flex flex-col h-full border-r border-border bg-card/40 backdrop-blur-xl saturate-150 relative z-10">
             <div className="p-4 border-b border-border flex items-center justify-between">
                 <h2 className="font-semibold text-lg">Teams</h2>
                 <CreateTeamDialog />

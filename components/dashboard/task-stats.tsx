@@ -37,8 +37,11 @@ export async function TaskStats({ userId }: { userId: string }) {
     return (
         <HoverEffect variant="lift" className="h-full">
             <Link href="/dashboard/tasks" prefetch={false} className="block h-full">
-                <SpotlightCard className="h-full bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-500/20">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <SpotlightCard
+                    className="h-full relative overflow-hidden group/card shadow-sm hover:shadow-md transition-all border-0"
+                    contentClassName="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-500/20 backdrop-blur-xl saturate-150"
+                >
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-0 pt-0">
                         <CardTitle className="text-base font-semibold">Tasks</CardTitle>
                         <CheckSquare className="h-5 w-5 text-blue-500" />
                     </CardHeader>

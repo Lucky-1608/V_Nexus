@@ -13,9 +13,9 @@ export default async function ChatPage() {
             </div>
 
             {/* Desktop View: Show Placeholder */}
-            <div className="hidden md:flex flex-col items-center justify-center h-full text-muted-foreground">
-                <div className="bg-accent/50 p-6 rounded-full mb-4">
-                    <MessageSquare className="h-12 w-12 text-primary" />
+            <div className="hidden md:flex flex-col items-center justify-center flex-1 h-full text-muted-foreground bg-card/40 backdrop-blur-xl border-l border-border/50 saturate-150">
+                <div className="bg-primary/10 p-6 rounded-full mb-4 shadow-sm border border-primary/20">
+                    <MessageSquare className="h-12 w-12 text-primary drop-shadow-sm" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2 text-foreground">Select a Chat</h3>
                 <p className="max-w-sm text-center text-sm">

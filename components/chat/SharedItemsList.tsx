@@ -10,6 +10,7 @@ import { FileText, BookOpen, StickyNote, ArrowDownToLine, Check, ExternalLink, M
 import { addToMyAccount } from '@/app/dashboard/chat/shared-actions'
 import { toast } from 'sonner'
 import Link from 'next/link'
+import { SpotlightCard } from '@/components/ui/spotlight-card'
 
 interface SharedItem {
     id: string
@@ -64,8 +65,12 @@ export function SharedItemsList({ items: initialItems, teamId }: SharedItemsList
                 item.shared_type === 'roadmap' ? MapIcon : StickyNote
 
         return (
-            <Card key={item.id} className="overflow-hidden">
-                <CardHeader className="p-4 bg-muted/30 pb-2">
+            <SpotlightCard
+                key={item.id}
+                className="overflow-hidden group/card border-0 transition-all duration-300 hover:shadow-xl hover:border-primary/40"
+                contentClassName="bg-card/40 backdrop-blur-xl border-border/50 saturate-150 p-0"
+            >
+                <CardHeader className="p-4 bg-muted/20 pb-2">
                     <div className="flex justify-between items-start gap-2">
                         <div className="flex items-center gap-2">
                             <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
@@ -123,7 +128,7 @@ export function SharedItemsList({ items: initialItems, teamId }: SharedItemsList
                         )}
                     </Button>
                 </CardFooter>
-            </Card>
+            </SpotlightCard>
         )
     }
 
